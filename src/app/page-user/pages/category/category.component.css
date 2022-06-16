@@ -1,0 +1,33 @@
+.overflow-text {
+  height: 33px;
+  padding: 10px;
+  width: 100%;
+  overflow: hidden;
+  display: block;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+}
+
+:host /deep/ .ngx-pagination {
+  display: flex;
+  justify-content: flex-end;
+}
+
+:host /deep/ .ngx-pagination .current {
+  background-color: #59ab6e;
+}
+
+/*:host /deep/ .ngx-pagination .pagination-next a {*/
+/*  background-color: #59ab6e;*/
+/*  color: #fff;*/
+/*}*/
+
+/*:host /deep/ .ngx-pagination .pagination-next a:hover {*/
+/*  background-color: #ddd;*/
+/*  color: black;*/
+/*}*/
+.swal-height {
+  height: 20px !important;
+  font-size: 0.5rem !important;
+}

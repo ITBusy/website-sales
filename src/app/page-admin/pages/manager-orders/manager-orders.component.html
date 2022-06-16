@@ -1,0 +1,282 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="accordion accordion-flush" id="accordionFlushExample"><!--accordion-->
+      <table class="table">
+        <thead>
+        <tr>
+          <th class="border-0 bg-light" scope="col" style="width: 120px">
+            <div class="p-2 px-3 text-uppercase">Mã ĐH</div>
+          </th>
+          <th class="border-0 bg-light" scope="col">
+            <div class="py-2 text-uppercase">Ngày Đặt</div>
+          </th>
+          <th class="border-0 bg-light" scope="col">
+            <div class="py-2 text-uppercase">Trạng Thái</div>
+          </th>
+          <th class="border-0 bg-light" scope="col">
+            <div class="py-2 text-uppercase">TK Đặt</div>
+          </th>
+          <th class="border-0 bg-light" scope="col">
+            <div class="py-2 text-uppercase">Tổng Tiền</div>
+          </th>
+          <th class="border-0 bg-light" scope="col" style="width: 390px;">
+            <div class="py-2 text-uppercase">###</div>
+          </th>
+        </tr>
+        </thead>
+        <tbody class="table-body">
+        <ng-container *ngFor="let item of orderList; let i = index">
+          <tr>
+            <td class="border-0 align-middle p-2 px-3" colspan="1" style="width: 120px">#SO-{{item?.oid}}</td>
+            <td class="border-0 align-middle">
+              {{item?.orderDate | date: 'dd/MM/yyyy - HH:mm:ss'}}
+            </td>
+            <td class="border-0 align-middle">
+            <span
+              [style.background-color]="item?.status == 'Cart'? '#ffb142' : item?.status == 'Cancelled orders' ? 'red' : '#33d9b2'"
+              style="color: #fff; padding: 5px; border-radius: 4px;">
+              {{item?.status}}
+            </span>
+            </td>
+            <td class="border-0 align-middle">
+              {{item?.userOrder?.username}}
+            </td>
+            <td class="border-0 align-middle">
+              {{item?.total?.toLocaleString('vn', {style: undefined, currency: 'VND'})}}
+            </td>
+            <td class="border-0 align-middle"
+                style="text-align: center; display: flex; width: 390px; flex-wrap: wrap">
+              <button (click)="infoBtn(item.oid)" class="btn btn-info" data-bs-target="#info-cart"
+                      data-bs-toggle="modal" style="margin-right: 10px"
+                      type="button">
+                <i class="fas fa-info"></i>
+                Chi Tiết
+              </button>
+              <button (click)="allotDelivery(item)"
+                      *ngIf="item?.status == 'Waiting for confirmation'"
+                      class="btn btn-success"
+                      data-bs-target="#allot-cart" data-bs-toggle="modal" style="margin-right: 10px" type="button">
+                <i class="fa fa-trash"></i>
+                Phân Công
+              </button>
+              <div class="accordion-item" style="height: 40px">
+                <h2 [id]="'flush-headingThree'+i" class="accordion-header">
+                  <button [attr.aria-controls]="'flush-collapseThree'+i"
+                          [attr.data-bs-target]="'#flush-collapseThree'+i"
+                          aria-expanded="false" class="accordion-button collapsed"
+                          data-bs-toggle="collapse" style="height: 40px" type="button">
+                    Sản Phẩm
+                  </button>
+                </h2>
+              </div>
+            </td>
+          </tr>
+          <!--Start flush-collapseThree -->
+          <tr>
+            <td colspan="6">
+              <div [attr.aria-labelledby]="'flush-headingThree'+i" [id]="'flush-collapseThree'+i"
+                   class="accordion-collapse collapse"
+                   data-bs-parent="#accordionFlushExample">
+                <div class="accordion-body">
+                  <table class="table table-striped table-inverse table-responsive table-detail">
+                    <thead class="thead-inverse">
+                    <tr>
+                      <th style="width: 70px">No.</th>
+                      <th colspan="2">Tên Sản Phẩm</th>
+                      <th>Đơn Giá</th>
+                      <th>Số Lượng</th>
+                      <th>Tổng Tiền</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let itemChild of item?.orderDetailsList; let index = index">
+                      <td scope="row" style="width: 70px">#{{index + 1}}</td>
+                      <td colspan="2">
+                        {{itemChild?.product?.name}}
+                      </td>
+                      <td>
+                        {{itemChild.price.toLocaleString('vn', {style: undefined, currency: 'VND'})}}
+                      </td>
+                      <td>
+                        {{itemChild?.quantity}}
+                      </td>
+                      <td>
+                        {{(itemChild.price * itemChild.quantity)?.toLocaleString('vn', {
+                        style: undefined,
+                        currency: 'VND'
+                      })}}
+                      </td>
+
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </ng-container>
+        <!--End flush-collapseThree -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<!-- Modal Info-->
+<div aria-hidden="true" aria-labelledby="staticBackdropLabel" class="modal fade" data-bs-backdrop="static"
+     data-bs-keyboard="false"
+     id="info-cart" tabindex="-1">
+  <div class="modal-dialog modal-lg" id="info-cart-xxl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Chi Tiết Đơn Hàng</h5>
+        <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+      </div>
+      <div class="modal-body">
+        <div class="card" style="background-color:#56ab6e; border-color:darkblue;">
+          <div class="card-body">
+            <table border="1" cellspacing="0" class="mce-item-table table table-bordered" id="info_order"
+                   style="background-color:#ffffff; border-collapse:collapse; border-spacing:0;
+                    border:1px solid #eeeeee; box-sizing:border-box; color:#333333;
+                     font-family:Roboto,sans-serif; font-size:13px; line-height:20px; margin-left:auto;
+                      margin-right:auto; max-width:100%; min-width:500px; width:100%; margin-bottom: 0">
+              <tbody style="box-sizing: border-box;">
+              <tr class="row-info" style="box-sizing:border-box">
+                <td
+                  style="background-color:#f7f7f7 !important;  box-sizing:border-box; padding:8px; vertical-align:top; width:22.1614%">
+                  <span style="font-size:16px"><strong>Mã Hoá Đơn</strong></span></td>
+                <td
+                  style=" box-sizing:border-box; padding:8px; vertical-align:top; width:529px">
+                  <span style="font-size:16px"><strong>{{order?.oid}}</strong></span>
+                </td>
+              </tr>
+              <tr class="row-info" style="box-sizing:border-box">
+                <td
+                  style="background-color:#f7f7f7 !important;  box-sizing:border-box; padding:8px; vertical-align:top; width:22.1614%">
+                  <strong><span style="font-size:16px">Địa Chỉ Giao Hàng</span></strong></td>
+                <td
+                  style=" box-sizing:border-box; padding:8px; vertical-align:top; width:529px">
+                  <span style="font-size:16px"><strong>{{order?.deliveryAddress}}</strong></span>
+                </td>
+              </tr>
+              <tr class="row-info" style="box-sizing:border-box">
+                <td
+                  style="background-color:#f7f7f7 !important;  box-sizing:border-box; padding:8px; vertical-align:top; width:22.1614%">
+                  <span style="font-size:16px"><strong>Người Nhận</strong></span></td>
+                <td
+                  style=" box-sizing:border-box; padding:8px; vertical-align:top; width:529px">
+                  <span style="font-size:16px"><strong>{{order?.recipientName}}</strong></span>
+                </td>
+              </tr>
+              <tr class="row-info" style="box-sizing:border-box">
+                <td
+                  style="background-color:#f7f7f7 !important;  box-sizing:border-box; padding:8px; vertical-align:top; width:22.1614%">
+                  <span style="font-size:16px"><strong>Số Điện Thoại</strong></span></td>
+                <td
+                  style=" box-sizing:border-box; padding:8px; vertical-align:top; width:529px">
+                  <strong><span style="font-size:16px">{{order?.phoneNumber}}</span></strong>
+                </td>
+              </tr>
+              <tr class="row-info" style="box-sizing:border-box">
+                <td
+                  style="background-color:#f7f7f7 !important;  box-sizing:border-box; padding:8px; vertical-align:top; width:22.1614%">
+                  <span style="font-size:16px"><strong>Ngày Đặt</strong></span></td>
+                <td
+                  style="box-sizing:border-box; padding:8px; vertical-align:top; width:529px">
+                  <strong><span
+                    style="font-size:16px">{{order?.orderDate  | date: 'dd/MM/yyyy - HH:mm:ss'}}</span></strong></td>
+              </tr>
+              <tr class="row-info" style="box-sizing:border-box">
+                <td
+                  style="background-color:#f7f7f7 !important;  box-sizing:border-box; padding:8px; vertical-align:top; width:22.1614%">
+                  <span style="font-size:16px"><strong>Ngày Giao</strong></span></td>
+                <td
+                  style=" box-sizing:border-box; padding:8px; vertical-align:top; width:529px">
+                  <strong><span
+                    style="font-size:16px">{{order?.deliveryDate  | date: 'dd/MM/yyyy - HH:mm:ss'}}</span></strong>
+                </td>
+              </tr>
+              <tr class="row-info" style="box-sizing:border-box">
+                <td
+                  style="background-color:#f7f7f7 !important; box-sizing:border-box; padding:8px; vertical-align:top; width:22.1614%">
+                  <span style="font-size:16px"><strong>Ngày Nhận</strong></span></td>
+                <td
+                  style=" box-sizing:border-box; padding:8px; vertical-align:top; width:529px">
+                  <strong><span style="font-size:16px">{{order?.recipientDate  | date: 'dd/MM/yyyy - HH:mm:ss'}}</span></strong>
+                </td>
+              </tr>
+              <tr class="row-info" style="box-sizing:border-box">
+                <td
+                  style="background-color:#f7f7f7 !important; box-sizing:border-box; padding:8px; vertical-align:top; width:22.1614%">
+                  <span style="font-size:16px"><strong>Trạng Thái</strong></span></td>
+                <td
+                  style=" box-sizing:border-box; padding:8px; vertical-align:top; width:529px">
+                  <strong>
+                    <span
+                      [style.background-color]="order?.status == 'Cart'? '#ffb142' : order?.status == 'Cancelled orders' ? 'red' : '#33d9b2'"
+                      style="color: #fff; font-size:1rem; padding: 5px; border-radius: 4px;">{{order?.status}}</span>
+                  </strong>
+                </td>
+              </tr>
+              <ng-container *ngIf="nameShipper != null">
+                <tr class="row-info" style="box-sizing:border-box">
+                  <td
+                    style="background-color:#f7f7f7 !important; box-sizing:border-box; padding:8px; vertical-align:top; width:22.1614%">
+                    <span style="font-size:16px"><strong>Shipper</strong></span></td>
+                  <td
+                    style=" box-sizing:border-box;font-size:16px; padding:8px; vertical-align:top; width:529px">
+                    <strong>
+                      {{nameShipper}}
+                    </strong>
+                  </td>
+                </tr>
+              </ng-container>
+              <tr class="row-info" style="box-sizing:border-box">
+                <td
+                  style="background-color:#f7f7f7 !important;  box-sizing:border-box; padding:8px; vertical-align:middle; width:22.1614%">
+                  <span style="font-size:16px"><strong>Tổng Tiền</strong></span></td>
+                <td
+                  style=" box-sizing:border-box; padding:8px; vertical-align:top; width:529px">
+                  <strong><span style="font-size:16px">
+                    {{order?.total?.toLocaleString('vn', {style: undefined, currency: 'VND'})}}
+                  </span></strong>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <!--      <div class="modal-footer">-->
+      <!--        <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Close</button>-->
+      <!--        <button class="btn btn-primary" type="button">Understood</button>-->
+      <!--      </div>-->
+    </div>
+  </div>
+</div>
+<!-- Modal Allot-->
+<div aria-hidden="true" aria-labelledby="staticBackdropLabel" class="modal fade" data-bs-backdrop="static"
+     data-bs-keyboard="false"
+     id="allot-cart" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabelAllot">Modal title</h5>
+        <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="shipper">Shipper</label>
+          <select [(ngModel)]="userID" [value]="shipper[0]?.id" class="form-control" id="shipper"
+                  name="shipper">
+            <option *ngFor="let item of shipper; let i = index" [selected]="i==0"
+                    [value]="item.id">{{item.fullName}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button #closeAllot class="btn btn-secondary" data-bs-dismiss="modal" type="button">Dóng</button>
+        <button (click)="allotShipper()" class="btn btn-primary" type="button">Phân Công</button>
+      </div>
+    </div>
+  </div>
+</div>

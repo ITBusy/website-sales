@@ -1,0 +1,44 @@
+.cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 2rem;
+    margin-top: 1rem;
+}
+
+.card-single {
+    display: flex;
+    justify-content: space-between;
+    background-color: rgb(209, 32, 32);
+    padding: 2rem;
+    border-radius: 4px;
+}
+
+.card-single span {
+    color: var(--text-dark);
+}
+
+.card-single i {
+    font-size: 3rem;
+}
+
+.card-single {
+    background-color: #59ab6e;
+}
+
+.card-single h1,
+.card-single span,
+.card-single i {
+    color: #fff;
+}
+
+.recent-grid {
+    margin-top: 3.5rem;
+    display: grid;
+    grid-gap: 2rem;
+    grid-template-columns: 70% auto;
+}
+
+.cards {
+    background-color: #fff;
+    border-radius: 5px;
+}

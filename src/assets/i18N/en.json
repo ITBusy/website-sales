@@ -1,0 +1,13 @@
+{
+  "admin_user": {
+    "btn_add": "Add User",
+    "table": "Avatar",
+    "table1": "Name Account",
+    "table2": "Full Name",
+    "table3": "Email",
+    "table4": "Role"
+  },
+  "header": {
+    "welcome": "Hi"
+  }
+}

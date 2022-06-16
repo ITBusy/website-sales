@@ -1,0 +1,362 @@
+<!-- |password|email|number|submit|date|datetime|datetime-local|month|color|range|search|tel|time|url|week -->
+<div class="card">
+  <div class="card-header" style="padding-bottom: 0">
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <div class="row height d-flex justify-content-center align-items-center">
+          <div class="form">
+            <i class="fa fa-search"></i>
+            <input class="form-control form-input" placeholder="Search anything..." type="text"/>
+            <span class="left-pan"><i class="fa fa-microphone"></i></span>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-create">
+          <button class="btn btn-primary" data-bs-target="#formUser" data-bs-toggle="modal" type="button">
+            Thêm Tài Khoản
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <table class="table table-bordered table-inverse table-responsive">
+      <thead class="thead-inverse">
+      <tr style="background-color: #59ab6e">
+        <th class="text-white" style="width: 95px">Avatar</th>
+        <th class="text-white">Tên Tài Khoản</th>
+        <th class="text-white">Họ và Tên</th>
+        <th class="text-white" colspan="2">Email</th>
+        <th class="text-white">Vai Trò</th>
+        <th class="text-white" colspan="2">###</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let item of user">
+        <td scope="row" style="width: 95px">
+          <img alt="" height="70px" src="{{ item.imageUrl }}" style="border-radius: 50%" width="70px"/>
+        </td>
+        <td>
+          {{ item.username }}
+        </td>
+        <td>
+          {{ item.fullName }}
+        </td>
+        <td colspan="2">
+          {{ item.email }}
+        </td>
+        <td>
+          {{ item.authorities[0].authority }}
+        </td>
+        <td colspan="2">
+          <button (click)="updateUser(item.id)" class="btn btn-link" data-bs-target="#updateUser"
+                  data-bs-toggle="modal">Cập Nhật
+          </button>
+          <button (click)="userDetail(item.id)" class="btn btn-link" data-bs-target="#user-detail"
+                  data-bs-toggle="modal">Chi Tiết
+          </button>
+          <button class="btn btn-link" data-bs-target="#formUser" data-bs-toggle="modal">Xóa</button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <!-- <div class="card-footer text-muted">
+      Footer
+  </div> -->
+</div>
+
+<!-- Modal create user-->
+<div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="formUser" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button *ngIf="uploadStatus" class="btn btn-primary" style="margin-left: 20px" type="button">
+          <span aria-hidden="true" class="spinner-border spinner-border-sm" role="status"></span>
+          Đang tải ảnh
+        </button>
+        <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+      </div>
+      <div class="modal-body">
+        <div class="avatar-user">
+          <div class="avatar-display-img">
+            <img alt="" class="img-avatar" src="{{ localUrl }}"/>
+            <label class="form-label mt-2 mb-3" for="avatar" style="color: #59ab6e; cursor: pointer">Chọn Ảnh Đại
+              Diện</label>
+          </div>
+          <input (change)="uploadFiles($event)" accept="image/*" class="form-control" hidden id="avatar" name="avatar"
+                 placeholder="Ảnh đại diện" required type="file"/>
+        </div>
+        <form [formGroup]="createUser" action="">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label class="form-label" for="fullname">Họ và Tên</label>
+                <input [ngClass]="{
+                    'is-invalid': formService.checkFormData(false, 'fullName',createUser, submitted),
+                    'is-valid': formService.checkFormData(true, 'fullName',createUser)
+                  }" class="form-control" formControlName="fullName" id="fullname" name="fullName"
+                       placeholder="Nhập họ tên" type="text"/>
+                <ng-container *ngIf="formService.checkFormData(false, 'fullName',createUser, submitted)"
+                              [ngSwitch]="formService.form('fullName',createUser).invalid">
+                  <small *ngSwitchCase="formService.form('fullName',createUser).hasError('required')"
+                         class="text-muted text-error">Vui lòng nhập họ tên</small>
+                  <small *ngSwitchCase="formService.form('fullName',createUser).hasError('isAlphabet')"
+                         class="text-muted text-error">Vui lòng nhập đầy đủ họ tên</small>
+                </ng-container>
+              </div>
+              <div class="mb-3">
+                <label class="form-label" for="username">Tên Tài Khoản</label>
+                <input [ngClass]="{
+                    'is-invalid':formService.checkFormData(false, 'username',createUser, submitted),
+                      'is-valid': formService.checkFormData(true, 'username',createUser)
+                  }" class="form-control" formControlName="username" id="username"
+                       name="username" placeholder="Nhập tên tài khoản" type="text"/>
+                <ng-container *ngIf="formService.checkFormData(false, 'username',createUser, submitted)"
+                              [ngSwitch]="formService.form('username',createUser).invalid">
+                  <small *ngSwitchCase="formService.form('username',createUser).hasError('required')"
+                         class="text-muted text-error">Vui lòng nhập tên tài khoản</small>
+                  <small *ngSwitchCase="formService.form('username',createUser).hasError('minlength')"
+                         class="text-error">Tên tài khoản phải lớn hơn 6 ký tự</small>
+                  <span *ngIf="!formService.form('username',createUser).hasError('minlength')">
+                    <small *ngSwitchCase="formService.form('username',createUser).hasError('pattern')"
+                           class="text-error">Vui lòng không có ký tự khoảng trắng hoặc ký tự đặc biệt</small>
+                  </span>
+                </ng-container>
+              </div>
+              <div class="mb-3">
+                <label class="form-label" for="email">Email</label>
+                <input [ngClass]="{
+                    'is-invalid':formService.checkFormData(false, 'email',createUser, submitted),
+                    'is-valid': formService.checkFormData(true, 'email',createUser)
+                  }" class="form-control" formControlName="email" id="email" name="email" placeholder="Nhập email"
+                       type="email"/>
+                <ng-container *ngIf="formService.checkFormData(false, 'email',createUser, submitted)"
+                              [ngSwitch]="formService.form('email',createUser).invalid">
+                  <small *ngSwitchCase="formService.form('email',createUser).hasError('required')"
+                         class="text-muted text-error">Vui lòng nhập email</small>
+                  <small *ngSwitchCase="formService.form('email',createUser).hasError('email')"
+                         class="text-muted text-error">Vui lòng nhập đúng định dạng email</small>
+                </ng-container>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label class="form-label" for="phone">Số Điện Thoại</label>
+                <input [ngClass]="{
+                    'is-invalid': formService.checkFormData(false, 'phoneNumber',createUser, submitted),
+                    'is-valid': formService.checkFormData(true, 'phoneNumber',createUser)
+                  }" class="form-control" formControlName="phoneNumber" id="phone" name="phoneNumber"
+                       placeholder="Nhập số điện thoại" type="number"/>
+                <ng-container *ngIf="formService.checkFormData(false, 'phoneNumber',createUser, submitted)"
+                              [ngSwitch]="formService.form('phoneNumber',createUser).invalid">
+                  <small *ngSwitchCase="formService.form('phoneNumber',createUser)?.hasError('required')"
+                         class="text-muted text-error">Vui lòng nhập số điện thoại</small>
+                </ng-container>
+              </div>
+              <div class="mb-3">
+                <label class="form-label" for="address">Địa Chỉ</label>
+                <input [ngClass]="{
+                    'is-invalid': formService.checkFormData(false, 'address',createUser, submitted),
+                    'is-valid': formService.checkFormData(true, 'address',createUser)
+                  }" class="form-control" formControlName="address" id="address" name="address" placeholder="Địa chỉ"
+                       type="text"/>
+                <ng-container *ngIf="formService.checkFormData(false, 'address',createUser, submitted)"
+                              [ngSwitch]="formService.form('address',createUser).invalid">
+                  <small *ngSwitchCase="formService.form('address',createUser)?.hasError('required')"
+                         class="text-muted text-error">Vui lòng nhập địa chỉ</small>
+                </ng-container>
+              </div>
+              <div class="mb-3">
+                <label class="form-label" for="password">Mật Khẩu</label>
+                <input [ngClass]="{
+                    'is-invalid': formService.checkFormData(false, 'password',createUser, submitted),
+                    'is-valid': formService.checkFormData(true, 'password',createUser)
+                  }" class="form-control" formControlName="password" id="password" name="password"
+                       placeholder="mật khẩu" type="password"/>
+                <ng-container *ngIf="formService.checkFormData(false, 'password',createUser, submitted)"
+                              [ngSwitch]="formService.form('password',createUser).invalid">
+                  <small *ngSwitchCase="formService.form('password',createUser)?.hasError('required')"
+                         class="text-muted text-error">Vui lòng nhập mật khẩu</small>
+                  <small *ngSwitchCase="formService.form('password',createUser)?.hasError('minlength')"
+                         class="text-muted text-error">Mật khẩu phải lớn 6 ký tự</small>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Vai Trò</label>
+            <select [value]="createUser.get('authorities')?.value" class="form-select" formControlName="authorities"
+                    id="role" name="role">
+              <option selected value="CLIENT">Client</option>
+              <option value="ADMIN">Admin</option>
+              <option value="SHIPPER">Shipper</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button #closeModal class="btn btn-secondary" data-bs-dismiss="modal" type="button">
+          Đóng
+        </button>
+        <button (click)="onload()" class="btn btn-primary" type="button">
+          Lưu
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal update user -->
+<div aria-hidden="true" aria-labelledby="updateUser" class="modal fade" id="updateUser" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Modal title</h5>
+        <button *ngIf="uploadStatus" class="btn btn-primary" style="margin-left: 20px" type="button">
+          <span aria-hidden="true" class="spinner-border spinner-border-sm" role="status"></span>
+          Đang tải ảnh
+        </button>
+        <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+      </div>
+      <div class="modal-body">
+        <div class="avatar-user">
+          <div class="avatar-display-img">
+            <img alt="" class="img-avatar" src="{{ localUrl }}"/>
+            <label class="form-label mt-2 mb-3" for="avatar1" style="color: #59ab6e; cursor: pointer">Chọn Ảnh Đại
+              Diện</label>
+          </div>
+          <input (change)="uploadFiles($event)" accept="image/*" class="form-control" hidden id="avatar1" name="avatar"
+                 placeholder="Ảnh đại diện" required type="file"/>
+        </div>
+        <form [formGroup]="updateUs">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <input class="form-control" hidden id="user_id" name="user_id" type="text">
+              </div>
+              <div class="form-group">
+                <label for="fullnameU">Họ và Tên</label>
+                <input
+                  [ngClass]="{'is-invalid': formService.checkFormData(false, 'fullName', updateUs, submitted),
+                  'is-valid': formService.checkFormData(true, 'fullName', updateUs)}"
+                  class="form-control"
+                  formControlName="fullName" id="fullnameU" name="fullnameU" type="text">
+                <ng-container *ngIf="formService.checkFormData(false, 'fullName', updateUs, submitted)"
+                              [ngSwitch]="formService.form('fullName', updateUs).invalid">
+                  <small *ngSwitchCase="formService.form('fullName',updateUs).hasError('required')"
+                         class="text-muted text-error">Vui lòng nhập họ tên</small>
+                  <small *ngSwitchCase="formService.form('fullName',updateUs).hasError('isAlphabet')"
+                         class="text-muted text-error">Vui lòng nhập đầy đủ họ tên</small>
+                </ng-container>
+
+              </div>
+              <div class="form-group">
+                <label for="usernameU">Tên Tài Khoản</label>
+                <input
+                  [attr.disabled]="true"
+                  [ngClass]="{'is-invalid': formService.checkFormData(false,'username', updateUs, submitted),
+                   'is-valid': formService.checkFormData(true, 'username', updateUs)}" class="form-control"
+                  formControlName="username" id="usernameU" name="usernameU"
+                  type="text">
+                <ng-container *ngIf="formService.checkFormData(false, 'username', updateUs, submitted)"
+                              [ngSwitch]="formService.form('username', updateUs).invalid">
+                  <small *ngSwitchCase="formService.form('username',updateUs).hasError('required')"
+                         class="text-muted text-error">Vui lòng nhập tên tài khoản</small>
+                  <small *ngSwitchCase="formService.form('username',updateUs).hasError('minlength')"
+                         class="text-error">Tên tài khoản phải lớn hơn 6 ký tự</small>
+                  <span *ngIf="!formService.form('username',updateUs).hasError('minlength')">
+                    <small *ngSwitchCase="formService.form('username',updateUs).hasError('pattern')"
+                           class="text-error">Vui lòng không có ký tự khoảng trắng hoặc ký tự đặc biệt</small>
+                    </span>
+                </ng-container>
+              </div>
+              <div class="form-group">
+                <label for="emailU">Email</label>
+                <input [attr.disabled]="true" [ngClass]="{'is-invalid': formService.checkFormData(false,'email',updateUs, submitted),
+                'is-valid': formService.checkFormData(true,'email', updateUs)}"
+                       class="form-control" formControlName="email" id="emailU" name="emailU" type="text">
+                <ng-container *ngIf="formService.checkFormData(false, 'email',updateUs, submitted)"
+                              [ngSwitch]="formService.form('email',updateUs).invalid">
+                  <small *ngSwitchCase="formService.form('email',updateUs).hasError('required')"
+                         class="text-muted text-error">Vui lòng nhập email</small>
+                  <small *ngSwitchCase="formService.form('email',updateUs).hasError('email')"
+                         class="text-muted text-error">Vui lòng nhập đúng định dạng email</small>
+                </ng-container>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="phoneNumberU">Số Điện Thoại</label>
+                <input [ngClass]="{'is-invalid': formService.checkFormData(false,'phoneNumber', updateUs, submitted),
+                'is-valid': formService.checkFormData(true, 'phoneNumber',updateUs)}" class="form-control"
+                       formControlName="phoneNumber" id="phoneNumberU" name="phoneNumberU" type="text">
+                <ng-container *ngIf="formService.checkFormData(false,'phoneNumber',updateUs, submitted)"
+                              [ngSwitch]="formService.form('phoneNumber',updateUs).invalid">
+                  <small *ngSwitchCase="formService.form('phoneNumber',updateUs)?.hasError('required')"
+                         class="text-muted text-error">Vui lòng nhập số điện thoại</small>
+                </ng-container>
+              </div>
+              <div class="form-group">
+                <label for="addressU">Địa Chỉ</label>
+                <input [ngClass]="{'is-invalid': formService.checkFormData(false, 'address', updateUs, submitted),
+                'is-valid': formService.checkFormData(true, 'address', updateUs)}" class="form-control"
+                       formControlName="address" id="addressU" name="addressU" type="text">
+                <ng-container *ngIf="formService.checkFormData(false, 'address', updateUs, submitted)"
+                              [ngSwitch]="formService.form('address',updateUs).invalid">
+                  <small *ngSwitchCase="formService.form('address',updateUs)?.hasError('required')"
+                         class="text-muted text-error">Vui lòng nhập địa chỉ</small>
+                </ng-container>
+              </div>
+              <div class="form-group">
+                <label for="passwordU">Mật Khẩu</label>
+                <input [ngClass]="{'is-invalid': formService.checkFormData(false, 'password', updateUs, submitted),
+                'is-valid': formService.checkFormData(true, 'password', updateUs)}" class="form-control"
+                       formControlName="password" id="passwordU" name="passwordU" type="text">
+                <ng-container *ngIf="formService.checkFormData(false, 'password', updateUs, submitted)"
+                              [ngSwitch]="formService.form('password',updateUs).invalid">
+                  <small *ngSwitchCase="formService.form('password',updateUs)?.hasError('required')"
+                         class="text-muted text-error">Vui lòng nhập mật khẩu</small>
+                  <small *ngSwitchCase="formService.form('password',updateUs)?.hasError('minlength')"
+                         class="text-muted text-error">Mật khẩu phải lớn 6 ký tự</small>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="roleU">Vai Trò</label>
+            <select [value]="updateUs.get('authorities')?.value" class="form-control"
+                    formControlName="authorities" id="roleU" name="roleU">
+              <option selected value="CLIENT">Client</option>
+              <option value="ADMIN">Admin</option>
+              <option value="SHIPPER">Shipper</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button #closeModalUpdate class="btn btn-secondary" data-bs-dismiss="modal" type="button">Đóng</button>
+        <button (click)="updateUserBtn()" class="btn btn-primary" type="button">Cập Nhật</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal Details -->
+<div aria-hidden="true" aria-labelledby="user-detail" class="modal fade" id="user-detail" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="user-detailModal">Modal title</h5>
+        <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Close</button>
+        <button class="btn btn-primary" type="button">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>

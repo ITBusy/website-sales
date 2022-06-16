@@ -1,0 +1,112 @@
+<!-- Start Top Nav -->
+<nav class="navbar navbar-expand-lg bg-dark navbar-light d-none d-lg-block" id="templatemo_nav_top">
+  <div class="text-light">
+    <div class="w-100 d-flex justify-content-end">
+      <div class="w-100 d-flex justify-content-end">
+        <div *ngIf="_login.isLoggedIn()" class="d-flex justify-content-end align-items-center"
+             style="width: 22%; margin-right: 25px;">
+                    <span style="font-size: 0.9rem !important; font-weight: bold;">Xin Chao
+                        <span style="margin-right: 5px; padding-right: 20px; color: #59ab6e">
+                          {{user.fullName | lowercase}}
+                        </span>
+                    </span>
+          <span (click)="logout()" class="logout" style="font-size: 0.9rem !important;">
+                        <i class="fas fa-sign-out-alt" style="margin-right: 5px;"></i>
+                        Logout
+                    </span>
+        </div>
+        <div *ngIf="!_login.isLoggedIn()">
+          <a [routerLink]="['/account/register']"
+             class="btn btn-link" style="font-size: 0.9rem !important; font-weight: bold !important; color: #c9c9c9;">Đăng
+            Ký</a>
+          <a [routerLink]="['/account/login']"
+             class="btn btn-link" style="font-size: 0.9rem !important; font-weight: bold !important; color: #c9c9c9;">Đăng
+            Nhập</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+<!-- Close Top Nav -->
+
+
+<!-- Header -->
+<nav class="navbar navbar-expand-lg navbar-light shadow">
+  <div class="container d-flex justify-content-between align-items-center">
+
+    <a [routerLink]="['/zayShopping']" class="navbar-brand text-success logo h1 align-self-center">
+      Zay
+    </a>
+
+    <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
+            class="navbar-toggler border-0" data-bs-target="#templatemo_main_nav" data-bs-toggle="collapse"
+            type="button">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="align-self-center collapse navbar-collapse flex-fill  d-lg-flex justify-content-lg-between"
+         id="templatemo_main_nav">
+      <div class="flex-fill">
+        <ul class="nav navbar-nav d-flex justify-content-between mx-lg-auto">
+          <li class="nav-item">
+            <a [routerLink]="['/zayShopping/category']" class="nav-link">Sản Phẩm</a>
+          </li>
+          <li class="nav-item">
+            <a [routerLink]="['/zayShopping/checkout']" class="nav-link">Đơn Hàng</a>
+          </li>
+          <li class="nav-item">
+            <a [routerLink]="['/zayShopping/about']" class="nav-link">Giới Thiệu</a>
+          </li>
+          <li class="nav-item">
+            <a [routerLink]="['/zayShopping/contact']" class="nav-link">Liên Hệ</a>
+          </li>
+        </ul>
+      </div>
+      <div class="navbar align-self-center d-flex">
+        <div class="d-lg-none flex-sm-fill mt-3 mb-4 col-7 col-sm-auto pr-3">
+          <div class="input-group">
+            <input class="form-control" id="inputMobileSearch" placeholder="Search ..." type="text">
+            <div class="input-group-text">
+              <i class="fa fa-fw fa-search"></i>
+            </div>
+          </div>
+        </div>
+        <a class="nav-icon d-none d-lg-inline" data-bs-target="#templatemo_search" data-bs-toggle="modal"
+           href="#">
+          <i class="fa fa-fw fa-search text-dark mr-2"></i>
+        </a>
+        <a [routerLink]="['/zayShopping/cart']" class="nav-icon position-relative text-decoration-none">
+          <i class="fa fa-fw fa-cart-arrow-down text-dark mr-1"></i>
+          <span *ngIf="count_cart > 0"
+                class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark">{{count_cart}}</span>
+        </a>
+        <a *ngIf="_login.isLoggedIn()" [routerLink]="['/zayShopping/profile']"
+           class="nav-icon position-relative text-decoration-none">
+          <img alt="" class="user-avatar" height="40px" src="{{user.imageUrl}}" width="40px">
+        </a>
+      </div>
+    </div>
+
+  </div>
+</nav>
+<!-- Close Header -->
+
+
+<!-- Modal -->
+<div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade bg-white" id="templatemo_search"
+     role="dialog"
+     tabindex="-1">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="w-100 pt-1 mb-5 text-right">
+      <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+    </div>
+    <form action="" class="modal-content modal-body border-0 p-0" method="get">
+      <div class="input-group mb-2">
+        <input class="form-control" id="inputModalSearch" name="q" placeholder="Search ..." type="text">
+        <button class="input-group-text bg-success text-light" type="submit">
+          <i class="fa fa-fw fa-search text-white"></i>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

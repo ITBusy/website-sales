@@ -1,0 +1,136 @@
+<div class="col-md-6 offset-md-3">
+  <form (ngSubmit)="onregister()" [formGroup]="register" class="form-register">
+    <app-sign-with></app-sign-with>
+    <!-- Name input -->
+    <div class="mb-2">
+      <label class="form-label" for="fullname">Họ và Tên</label>
+      <input [ngClass]="{
+            'is-invalid':
+            (!submitted &&form('fullName')?.invalid)
+            ||  form('fullName')?.invalid &&
+              (form('fullName')?.touched ||
+                form('fullName')?.dirty),
+            'is-valid':
+              form('fullName')?.valid &&
+              (form('fullName')?.touched ||
+                form('fullName')?.dirty)
+            }" class="form-control" formControlName="fullName" id="fullname" maxlength="20"
+             name="fullname" placeholder="" type="text">
+      <ng-container *ngIf="form('fullName')?.invalid && (form('fullName')?.touched || form('fullName')?.dirty)"
+                    [ngSwitch]="form('fullName')?.invalid">
+        <small *ngSwitchCase="form('fullName').hasError('required')"
+               class="text-muted text-error">Vui lòng nhập họ tên
+        </small>
+        <small *ngSwitchCase="form('fullName').hasError('isAlphabet')"
+               class="text-muted text-error">Vui lòng nhập đầy đủ họ tên
+        </small>
+      </ng-container>
+    </div>
+    <!-- Username input -->
+    <div class="mb-2">
+      <label class="form-label" for="username">Tên Tài Khoản</label>
+      <input [ngClass]="{
+            'is-invalid':
+            (!submitted && form('username')?.invalid) ||
+              form('username')?.invalid &&
+              (form('username')?.touched ||
+                form('username')?.dirty),
+            'is-valid':
+              form('username')?.valid &&
+              (form('username')?.touched ||
+                form('username')?.dirty)
+            }" class="form-control" formControlName="username" id="username" maxlength="25"
+             name="username" placeholder="" type="text">
+      <ng-container *ngIf="form('username').invalid && (form('username').dirty || form('username').touched)"
+                    [ngSwitch]="form('username').invalid">
+        <small *ngSwitchCase="form('username').hasError('required')" class="text-error">Vui lòng nhập tên tài
+          khoản</small>
+        <small *ngSwitchCase="form('username').hasError('minlength')" class="text-error">Tên tài
+          khoản phải lớn hơn 6 ký tự</small>
+        <span *ngIf="!form('username').hasError('minlength')">
+                    <small *ngSwitchCase="form('username').hasError('pattern')" class="text-error">Vui lòng không có ký
+                        tự khoảng trắng hoặc
+                        ký tự đặc biệt</small>
+                </span>
+      </ng-container>
+
+    </div>
+
+    <!-- Email input -->
+    <div class="mb-2">
+      <label class="form-label" for="email">Email</label>
+      <input [ngClass]="{
+            'is-invalid': (!submitted &&form('email')?.invalid)
+            || form('email')?.invalid &&
+              (form('email')?.touched ||
+                form('email')?.dirty),
+            'is-valid':
+              form('email')?.valid &&
+              (form('email')?.touched ||
+                form('email')?.dirty)
+            }" class="form-control" formControlName="email" id="email" name="email" placeholder=""
+             type="email">
+      <ng-container *ngIf="form('email').invalid && (form('email').dirty || form('email').touched)"
+                    [ngSwitch]="form('email').invalid">
+        <small *ngSwitchCase="form('email').hasError('required')" class="text-muted text-error">Vui lòng nhập
+          email</small>
+        <small *ngSwitchCase="form('email').hasError('email')" class="text-muted text-error">Vui lòng nhập đúng
+          định dạng email</small>
+      </ng-container>
+    </div>
+
+    <!-- Password input -->
+    <div class="mb-2">
+      <label class="form-label" for="password">Mật Khẩu</label>
+      <input [ngClass]="{
+            'is-invalid': (!submitted &&form('password')?.invalid)
+            || form('password')?.invalid &&
+              (form('password')?.touched ||
+                form('password')?.dirty),
+            'is-valid':
+              form('password')?.valid &&
+              (form('password')?.touched ||
+                form('password')?.dirty)
+            }" class="form-control" formControlName="password" id="password" name="password"
+             placeholder="" type="password">
+      <ng-container *ngIf="form('password').invalid && (form('password').dirty || form('password').touched)"
+                    [ngSwitch]="form('password').invalid">
+        <small *ngSwitchCase="form('password')?.hasError('required')" class="text-muted text-error">Vui lòng
+          nhập mật khẩu</small>
+        <small *ngSwitchCase="form('password')?.hasError('minlength')" class="text-muted text-error">Mật khẩu
+          phải lớn 6 ký tự</small>
+      </ng-container>
+    </div>
+
+    <!-- Repeat Password input -->
+    <div class="mb-2">
+      <label class="form-label" for="repassword">Nhập Lại Mật Khẩu</label>
+      <input [ngClass]="{
+            'is-invalid':(!submitted &&form('repassword')?.invalid)
+            || form('repassword')?.invalid &&
+              (form('repassword')?.touched ||
+                form('repassword')?.dirty),
+            'is-valid':
+              form('repassword')?.valid &&
+              (form('repassword')?.touched ||
+                form('repassword')?.dirty)
+            }" class="form-control" formControlName="repassword" id="repassword" name="repassword"
+             placeholder="" type="password">
+      <ng-container *ngIf="form('repassword').invalid && (form('repassword').dirty || form('repassword').touched)"
+                    [ngSwitch]="form('repassword').invalid">
+        <small *ngSwitchCase="form('repassword')?.hasError('required')"
+               class="text-muted text-error">Vui lòng nhập xác nhận mật khẩu</small>
+        <small *ngSwitchCase="form('repassword')?.hasError('confirmPassword')" class="text-muted text-error"
+               id="helpId">Mật khẩu không khớp</small>
+      </ng-container>
+
+    </div>
+    <!-- Submit button -->
+    <button class="btn btn-primary btn-block mb-2" type="submit">Đăng Ký</button>
+
+    <!-- Login buttons -->
+    <div class="text-center">
+      <p style="color: #fff">Bạn đã có tài khoản <a [routerLink]="['/account/login']">Đăng Nhập</a></p>
+    </div>
+  </form>
+</div>

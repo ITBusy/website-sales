@@ -1,0 +1,129 @@
+<!-- Start Content -->
+<div class="container py-5">
+  <div class="row">
+
+    <div class="col-lg-3">
+      <h1 class="h2 pb-4">Hãng Sản Xuất</h1>
+      <ul class="list-unstyled templatemo-accordion">
+        <li *ngFor="let item of manufacturer" class="pb-3">
+          <a (click)="findProductByManufacturerId(item.id)" [queryParams]="{manufacturer: item.id}"
+             [routerLink]="['/zayShopping/category']"
+             class="collapsed d-flex justify-content-between h3 text-decoration-none">
+            {{item.name}}
+            <!--            <i class="fa fa-fw fa-chevron-circle-down mt-1"></i>-->
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="col-lg-9">
+      <div class="row">
+        <div class="col-md-6">
+          <ul class="list-inline shop-top-menu pb-3 pt-1">
+            <li class="list-inline-item">
+              <a (click)="getAllProducts()" [routerLink]="['/zayShopping/category']"
+                 class="h3 text-dark text-decoration-none mr-3">All</a>
+            </li>
+            <li class="list-inline-item">
+              <a class="h3 text-dark text-decoration-none mr-3" href="#">Mới</a>
+            </li>
+            <li class="list-inline-item">
+              <a class="h3 text-dark text-decoration-none" href="#">Bán Chạy</a>
+            </li>
+          </ul>
+        </div>
+        <div class="col-md-6 pb-4">
+          <div class="d-flex">
+            <select class="form-control">
+              <option>Mặc Định</option>
+              <option>A đến Z</option>
+              <option>Giá</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div *ngFor="let item of products  | paginate: {itemsPerPage: 6, currentPage: page}" class="col-md-4">
+          <div class="card mb-4 product-wap rounded-0">
+            <div class="card rounded-0">
+              <img alt="" class="card-img rounded-0 img-fluid" src="{{item.imageMain}}">
+              <div
+                class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
+                <ul class="list-unstyled">
+                  <li><a class="btn btn-success text-white" href="shop-single.html"><i
+                    class="far fa-heart"></i></a></li>
+                  <li><a class="btn btn-success text-white mt-2" href="shop-single.html"><i
+                    class="far fa-eye"></i></a></li>
+                  <li><a (click)="addCart(item.pid)" class="btn btn-success text-white mt-2"><i
+                    class="fas fa-cart-plus"></i></a></li>
+                </ul>
+              </div>
+            </div>
+            <a (click)="openProductDetail(item.pid)" [queryParams]="{productID: item.pid}"
+               [routerLink]="['/zayShopping/detail']"
+               class="h3 text-decoration-none overflow-text"
+               style="color:#198754; cursor: pointer; font-weight: 400 !important;">{{item.name}}</a>
+            <div (click)="openProductDetail(item.pid)" class="card-body" style="padding-top: 0; cursor: pointer">
+
+              <ul class="w-100 list-unstyled d-flex justify-content-between mb-0">
+                <li style="padding-bottom: 10px;">
+                  <small
+                    style="background-color: #e8e8e8;padding: 2px 10px; border-radius: 2px;border: 1px solid #59ab6e; margin-right: 10px;">
+                    {{item.ramdisk | chain: 1}} GB
+                  </small>
+                  <small
+                    style="background-color: #e8e8e8;padding: 2px 10px; border-radius: 2px;border: 1px solid #59ab6e;">
+                    {{item.hardDiskDrive | chain: 2}}
+                  </small>
+                </li>
+                <li class="pt-2">
+                  <span class="product-color-dot color-dot-red float-left rounded-circle ml-1"></span>
+                  <span
+                    class="product-color-dot color-dot-blue float-left rounded-circle ml-1"></span>
+                  <span
+                    class="product-color-dot color-dot-black float-left rounded-circle ml-1"></span>
+                  <span
+                    class="product-color-dot color-dot-light float-left rounded-circle ml-1"></span>
+                  <span
+                    class="product-color-dot color-dot-green float-left rounded-circle ml-1"></span>
+                </li>
+              </ul>
+              <ul class="list-unstyled d-flex justify-content-center mb-1">
+                <li>
+                  <i class="text-warning fa fa-star"></i>
+                  <i class="text-warning fa fa-star"></i>
+                  <i class="text-warning fa fa-star"></i>
+                  <i class="text-muted fa fa-star"></i>
+                  <i class="text-muted fa fa-star"></i>
+                </li>
+              </ul>
+              <p class="text-center mb-0" style="color: #dc3545; font-weight: bold; font-size: 1.3rem">
+                {{item.price.toLocaleString('vn', {style: undefined, currency: 'VND'})}}
+                VND</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--      <div div="row">-->
+      <!--        <ul class="pagination pagination-lg justify-content-end">-->
+      <!--          <li class="page-item disabled">-->
+      <!--            <a class="page-link active rounded-0 mr-3 shadow-sm border-top-0 border-left-0" href="#"-->
+      <!--               tabindex="-1">1</a>-->
+      <!--          </li>-->
+      <!--          <li class="page-item">-->
+      <!--            <a class="page-link rounded-0 mr-3 shadow-sm border-top-0 border-left-0 text-dark"-->
+      <!--               href="#">2</a>-->
+      <!--          </li>-->
+      <!--          <li class="page-item">-->
+      <!--            <a class="page-link rounded-0 shadow-sm border-top-0 border-left-0 text-dark" href="#">3</a>-->
+      <!--          </li>-->
+      <!--        </ul>-->
+      <!--      </div>-->
+      <ng-container *ngIf="products.length > 6">
+        <pagination-controls (pageChange)="page = $event"></pagination-controls>
+      </ng-container>
+    </div>
+
+  </div>
+</div>
+<!-- End Content -->

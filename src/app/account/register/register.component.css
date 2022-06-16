@@ -1,0 +1,15 @@
+.form-register {
+    background-color: rgba(0, 0, 0, 0.5);
+    margin-top: 4rem;
+    margin-bottom: 4rem;
+    padding: 25px;
+    border-radius: 5px;
+}
+
+.form-label {
+    color: #56ab6e;
+}
+
+.text-error {
+    color: red !important;
+}

@@ -1,0 +1,112 @@
+<div class="card">
+  <!--  style="background-color:#6db4fe; border-color:darkblue;"-->
+  <div class="card-header">
+    <button class="btn btn-primary" data-bs-target="#create-category" data-bs-toggle="modal"
+            type="button">Thêm Thể Loại
+    </button>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-10 offset-md-1">
+        <table class="table table-striped table-inverse table-responsive">
+          <thead class="thead-inverse">
+          <tr style="background-color: #59ab6e">
+            <th class="text-white">No.</th>
+            <th class="text-white">ID</th>
+            <th class="text-white" colspan="2">Tên Thể Loại</th>
+            <th class="text-white">###</th>
+          </tr>
+          </thead>
+          <tbody>
+          <ng-container *ngIf="category.length <= 0">
+            <tr>
+              <td class="text-center" colspan="5">Hiện tại chưa có dữ liệu</td>
+            </tr>
+          </ng-container>
+          <ng-container *ngIf="category.length > 0">
+            <tr *ngFor="let item of category; let i=index">
+              <td scope="row">{{i + 1}}</td>
+              <td>{{item.cId}}</td>
+              <td colspan="2">{{item.name}}</td>
+              <td>
+                <button (click)="getDataUpdate(item.cId)" class="btn btn-link" data-bs-target="#update-category"
+                        data-bs-toggle="modal">Cập Nhật
+                </button>
+                <button class="btn btn-link">Xóa</button>
+              </td>
+            </tr>
+          </ng-container>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal create -->
+<div aria-hidden="true" aria-labelledby="create-category" class="modal fade" id="create-category" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="create-category-Label">Thêm Thể Loại</h5>
+
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="createCategory">
+          <div class="form-group">
+            <label for="name">Tên Thể Loại</label>
+            <input [ngClass]="{'is-invalid': _formService.checkFormData(false, 'name', createCategory, submitted),
+            'is-valid': _formService.checkFormData(true, 'name', createCategory)}"
+                   class="form-control" formControlName="name" id="name"
+                   name="name" type="text">
+            <ng-container *ngIf=" _formService.checkFormData(false, 'name', createCategory, submitted)"
+                          [ngSwitch]="_formService.form('name',createCategory).invalid">
+              <small *ngSwitchCase="_formService.form('name', createCategory).hasError('required')"
+                     class="text-muted text-error">Vui Lòng nhập tên thể loại</small>
+              <small *ngSwitchCase="_formService.form('name', createCategory).hasError('isAlphabet')"
+                     class="text-muted text-error">Tên thể loại phải là ký tự và không có ký đặc biệt</small>
+            </ng-container>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button #closeFormCreate class="btn btn-secondary" data-bs-dismiss="modal" type="button">Đóng</button>
+        <button (click)="createCategoryBtn()" class="btn btn-primary" type="button">Thêm</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal update -->
+<div aria-hidden="true" aria-labelledby="update-category" class="modal fade" id="update-category" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="update-category-Label">Cập Nhật Thể Loại</h5>
+        <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="updateCategory">
+          <input class="form-control" formControlName="cId" hidden id="categoruID" name="categoruID" type="number">
+          <div class="form-group">
+            <label for="namec">Tên Thể Loại</label>
+            <input [ngClass]="{'is-invalid': _formService.checkFormData(false, 'name', updateCategory, submitted),
+            'is-valid': _formService.checkFormData(true, 'name', updateCategory)}"
+                   class="form-control" formControlName="name" id="namec" name="namec" type="text">
+            <ng-container *ngIf=" _formService.checkFormData(false, 'name', updateCategory, submitted)"
+                          [ngSwitch]="_formService.form('name',updateCategory).invalid">
+              <small *ngSwitchCase="_formService.form('name', updateCategory).hasError('required')"
+                     class="text-muted text-error">Vui Lòng nhập tên thể loại</small>
+              <small *ngSwitchCase="_formService.form('name', updateCategory).hasError('isAlphabet')"
+                     class="text-muted text-error">Tên thể loại phải là ký tự và không có ký đặc biệt</small>
+            </ng-container>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button #closeFormUpdate class="btn btn-secondary" data-bs-dismiss="modal"
+                type="button">Đóng
+        </button>
+        <button (click)="updateCategoryBtn()" class="btn btn-primary" type="button">Cập Nhật</button>
+      </div>
+    </div>
+  </div>
+</div>

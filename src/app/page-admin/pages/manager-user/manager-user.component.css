@@ -1,0 +1,122 @@
+.img-avatar {
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+table {
+    display: flex;
+    flex-flow: column;
+    width: 100%;
+}
+
+thead {
+    flex: 0 0 auto;
+}
+
+tbody {
+    flex: 1 1 auto;
+    display: block;
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: 500px;
+}
+
+tr {
+    width: 100%;
+    display: table;
+    table-layout: fixed;
+}
+
+tbody tr td {
+    vertical-align: middle;
+    border: none;
+}
+
+/* width */
+tbody::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+tbody::-webkit-scrollbar-track {
+    /* box-shadow: inset 0 0 2px grey; */
+    border-radius: 10px;
+}
+
+/* Handle */
+tbody::-webkit-scrollbar-thumb {
+    background: grey;
+    border-radius: 10px;
+}
+
+
+.form {
+
+    position: relative;
+}
+
+.form .fa-search {
+
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    color: #9ca3af;
+
+}
+
+.form span {
+
+    position: absolute;
+    right: 17px;
+    top: 13px;
+    padding: 2px;
+    border-left: 1px solid #d1d5db;
+
+}
+
+.left-pan {
+    padding-left: 7px;
+}
+
+.left-pan i {
+
+    padding-left: 10px;
+}
+
+.form-input {
+
+    height: 55px;
+    text-indent: 33px;
+    border-radius: 10px;
+}
+
+.form-input:focus {
+
+    box-shadow: none;
+    border: none;
+}
+
+.form-create {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+}
+
+.avatar-display-img {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.img-avatar {
+    border-radius: 50%;
+    height: 95px;
+    width: 95px;
+    object-fit: cover;
+    border: 0.1rem solid #59ab6e;
+}
+
+.text-error {
+    color: red !important;
+}

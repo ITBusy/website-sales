@@ -1,0 +1,113 @@
+<div class="card">
+  <!--  style="background-color:#6db4fe; border-color:darkblue;"-->
+  <div class="card-header">
+    <button class="btn btn-primary" data-bs-target="#create-manufacturer" data-bs-toggle="modal"
+            type="button">Thêm Hãng Sản Xuất
+    </button>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-10 offset-md-1">
+        <table class="table table-striped table-inverse table-responsive">
+          <thead class="thead-inverse">
+          <tr style="background-color: #59ab6e">
+            <th class="text-white">No.</th>
+            <th class="text-white">ID</th>
+            <th class="text-white" colspan="2">Tên Hãng</th>
+            <th class="text-white">###</th>
+          </tr>
+          </thead>
+          <tbody>
+          <ng-container *ngIf="manufacturer.length <= 0">
+            <tr>
+              <td class="text-center" colspan="5">Hiện tại chưa có dữ liệu</td>
+            </tr>
+          </ng-container>
+          <ng-container *ngIf="manufacturer.length > 0">
+            <tr *ngFor="let item of manufacturer; let i=index">
+              <td scope="row">{{i + 1}}</td>
+              <td>{{item.id}}</td>
+              <td colspan="2">{{item.name | lowercase}}</td>
+              <td>
+                <button (click)="getDataUpdate(item.id)" class="btn btn-link" data-bs-target="#update-manufacturer"
+                        data-bs-toggle="modal">Cập Nhật
+                </button>
+                <button class="btn btn-link">Xóa</button>
+              </td>
+            </tr>
+          </ng-container>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal create -->
+<div aria-hidden="true" aria-labelledby="create-manufacturer" class="modal fade" id="create-manufacturer" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="create-manufacturer-Label">Thêm Hãng Sản Xuất</h5>
+
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="createManufacturer">
+          <div class="form-group">
+            <label for="name">Tên Hãng</label>
+            <input [ngClass]="{'is-invalid': _formService.checkFormData(false, 'name', createManufacturer, submitted),
+            'is-valid': _formService.checkFormData(true, 'name', createManufacturer)}"
+                   class="form-control" formControlName="name" id="name"
+                   name="name" type="text">
+            <ng-container *ngIf=" _formService.checkFormData(false, 'name', createManufacturer, submitted)"
+                          [ngSwitch]="_formService.form('name',createManufacturer).invalid">
+              <small *ngSwitchCase="_formService.form('name', createManufacturer).hasError('required')"
+                     class="text-muted text-error">Vui Lòng nhập tên hãng sản xuất</small>
+              <small *ngSwitchCase="_formService.form('name', createManufacturer).hasError('isAlphabet')"
+                     class="text-muted text-error">Tên hãng sản xuất phải là ký tự và không có ký đặc biệt</small>
+            </ng-container>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button #closeFormCreate class="btn btn-secondary" data-bs-dismiss="modal" type="button">Đóng</button>
+        <button (click)="createManufacturerBtn()" class="btn btn-primary" type="button">Thêm</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal update -->
+<div aria-hidden="true" aria-labelledby="update-manufacturer" class="modal fade" id="update-manufacturer" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="update-manufacturer-Label">Cập Nhật Hãng Sản Xuất</h5>
+        <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="updateManufacturer">
+          <input class="form-control" formControlName="id" hidden id="categoruID" name="categoruID" type="number">
+          <div class="form-group">
+            <label for="namec">Tên Hãng</label>
+            <input [ngClass]="{'is-invalid': _formService.checkFormData(false, 'name', updateManufacturer, submitted),
+            'is-valid': _formService.checkFormData(true, 'name', updateManufacturer)}"
+                   class="form-control" formControlName="name" id="namec" name="namec" type="text">
+            <ng-container *ngIf=" _formService.checkFormData(false, 'name', updateManufacturer, submitted)"
+                          [ngSwitch]="_formService.form('name',updateManufacturer).invalid">
+              <small *ngSwitchCase="_formService.form('name', updateManufacturer).hasError('required')"
+                     class="text-muted text-error">Vui Lòng nhập tên hãng sản xuất</small>
+              <small *ngSwitchCase="_formService.form('name', updateManufacturer).hasError('isAlphabet')"
+                     class="text-muted text-error">Tên hãng sản xuất phải là ký tự và không có ký đặc biệt</small>
+            </ng-container>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button #closeFormUpdate class="btn btn-secondary" data-bs-dismiss="modal"
+                type="button">Đóng
+        </button>
+        <button (click)="updateManufacturerBtn()" class="btn btn-primary" type="button">Cập Nhật</button>
+      </div>
+    </div>
+  </div>
+</div>
+

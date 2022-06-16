@@ -1,0 +1,16 @@
+.logout {
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.logout:hover {
+    color: #59ab6e;
+}
+
+.user-avatar {
+
+    border-radius: 50%;
+    border: 1px solid #59ab6e;
+    margin-bottom: 5px;
+    margin-left: 5px;
+}

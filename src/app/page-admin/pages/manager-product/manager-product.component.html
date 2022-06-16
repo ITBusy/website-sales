@@ -1,0 +1,645 @@
+<div class="card">
+  <div class="card-header">
+    <button (click)="reset()" class="btn btn-primary" data-bs-target="#create-product" data-bs-toggle="modal"
+            type="button">Thêm Sản Phẩm
+    </button>
+  </div>
+  <div class="card-body">
+    <table class="table table-bordered table-inverse table-responsive">
+      <thead class="thead-inverse">
+      <tr style="background-color: #59ab6e">
+        <th class="text-white" style="width: 95px">Ảnh</th>
+        <th class="text-white">Tên Sản Phẩm</th>
+        <th class="text-white">Cpu</th>
+        <th class="text-white" colspan="2">Ổ Cứng</th>
+        <th class="text-white">Ram</th>
+        <th class="text-white">Màn Hình</th>
+        <th class="text-white" colspan="2">###</th>
+      </tr>
+      </thead>
+      <tbody>
+      <ng-container *ngIf="products.length <= 0">
+        <tr>
+          <td class="text-center" colspan="5">Hiện tại chưa có dữ liệu</td>
+        </tr>
+      </ng-container>
+      <tr *ngFor="let item of products">
+        <td scope="row" style="width: 95px">
+          <img alt="" height="70px" src="{{item.imageMain != '' ? item.imageMain : null}}"
+               width="70px"/>
+        </td>
+        <td>
+          {{ item.name}}
+        </td>
+        <td>
+          {{ item.cpu }}
+        </td>
+        <td colspan="2">
+          {{ item.hardDiskDrive | cutChain}}
+        </td>
+        <td>
+          {{ item.ramdisk | cutChain: 2 }}
+        </td>
+        <td>
+          {{ item.monitors }}
+        </td>
+        <td colspan="2">
+          <button (click)="findProductById(item.pid)" class="btn btn-link" data-bs-target="#update-product"
+                  data-bs-toggle="modal">Cập Nhật
+          </button>
+          <button class="btn btn-link" data-bs-target="#user-detail"
+                  data-bs-toggle="modal">Chi Tiết
+          </button>
+          <button class="btn btn-link" data-bs-target="#formUser" data-bs-toggle="modal">Xóa</button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<!-- Modal create product-->
+<div aria-hidden="true" aria-labelledby="create-product-label" class="modal fade" data-bs-backdrop="static"
+     id="create-product" tabindex="-1">
+  <!--upload image on firebase-->
+  <div *ngIf="uploadStatus" class="upload">
+    <div class="upload-icon">
+      <div class="d-flex justify-content-center align-items-center">
+        <div class="spinner-grow text-primary" role="status">
+          <span class="sr-only">Loading...</span>
+        </div>
+
+      </div>
+      <span class="text-center">Đang tải ảnh...</span>
+    </div>
+  </div>
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="create-product-label">Form Thêm Sản Phẩm</h5>
+        <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="createProduct">
+          <div class="image-main">
+            <img alt="" height="100px" src="{{imageMain}}" width="100px">
+            <div class="form-group"
+                 style="display: flex; flex-direction: column; padding-top: 10px; justify-content: center">
+              <label for="iamgemain" style="color: #146c43; cursor: pointer;">Chọn Ảnh Sản Phẩm</label>
+              <input (change)="EventImageMain($event.target)" aria-describedby="fileHelpId" class="form-control-file"
+                     hidden id="iamgemain" name="iamgemain"
+                     type="file">
+              <ng-container *ngIf="imageMain == null && !submittedCreate">
+                <small class="form-text text-muted text-error" id="fileHelpId">Vui lòng chon ảnh chính cho sản
+                  phẩm</small>
+              </ng-container>
+            </div>
+          </div>
+          <hr>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group mt-3">
+                <label for="nameProduct">Tên Sản Phẩm</label>
+                <input [ngClass]="{'is-invalid': _formService.checkFormData(false,'name', createProduct, submittedCreate),
+               'is-valid': _formService.checkFormData(true,'name', createProduct)}" class="form-control"
+                       formControlName="name" id="nameProduct" name="nameProduct" type="text">
+                <ng-container *ngIf="_formService.checkFormData(false,'name', createProduct, submittedCreate)"
+                              [ngSwitch]="_formService.form('name', createProduct).invalid">
+                  <small *ngSwitchCase="_formService.form('name', createProduct).hasError('required')"
+                         class="text-muted text-error">Vui lòng nhập thông tin tên sản phẩm</small>
+                </ng-container>
+              </div>
+              <div class="form-group mt-3">
+                <label for="cpu">CPU</label>
+                <input [ngClass]="{'is-invalid':  _formService.checkFormData(false,'cpu', createProduct, submittedCreate),
+                       'is-valid':  _formService.checkFormData(true,'cpu', createProduct)}"
+                       class="form-control" formControlName="cpu"
+                       id="cpu" name="cpu" type="text">
+                <ng-container *ngIf=" _formService.checkFormData(false,'cpu', createProduct, submittedCreate)"
+                              [ngSwitch]="_formService.form('cpu',createProduct).invalid">
+                  <small *ngSwitchCase="_formService.form('cpu',createProduct).hasError('required')"
+                         class="text-muted text-error">Vui lòng nhập thông tin cpu</small>
+                </ng-container>
+              </div>
+              <div class="form-group mt-3">
+                <label for="gpu">GPU</label>
+                <input [ngClass]="{'is-invalid':  _formService.checkFormData(false,'gpu', createProduct, submittedCreate),
+                       'is-valid':  _formService.checkFormData(true,'gpu', createProduct)}"
+                       class="form-control" formControlName="gpu"
+                       id="gpu" name="gpu" type="text">
+                <ng-container *ngIf=" _formService.checkFormData(false,'gpu', createProduct, submittedCreate)"
+                              [ngSwitch]="_formService.form('gpu',createProduct).invalid">
+                  <small *ngSwitchCase="_formService.form('gpu', createProduct).hasError('required')"
+                         class="text-muted text-error">Vui lòng nhập thông tin gpu</small>
+                </ng-container>
+              </div>
+              <div class="form-group mt-3">
+                <label for="hardDiskDrive">Ổ Cứng</label>
+                <input [ngClass]="{'is-invalid':  _formService.checkFormData(false,'hardDiskDrive', createProduct, submittedCreate),
+                'is-valid': _formService.checkFormData(true,'hardDiskDrive', createProduct)}" class="form-control"
+                       formControlName="hardDiskDrive" id="hardDiskDrive" name="hardDiskDrive" type="text">
+                <ng-container *ngIf=" _formService.checkFormData(false,'hardDiskDrive', createProduct, submittedCreate)"
+                              [ngSwitch]="_formService.form('hardDiskDrive',createProduct).invalid">
+                  <small *ngSwitchCase="_formService.form('hardDiskDrive', createProduct).hasError('required')"
+                         class="text-muted text-error">Vui lòng nhập thông tin ổ cứng</small>
+                </ng-container>
+              </div>
+              <div class="form-group mt-3">
+                <label for="ram">Ram</label>
+                <input [ngClass]="{'is-invalid':  _formService.checkFormData(false,'ramdisk', createProduct, submittedCreate),
+                'is-valid': _formService.checkFormData(true,'ramdisk', createProduct)}" class="form-control"
+                       formControlName="ramdisk" id="ram"
+                       name="ram" type="text">
+                <ng-container *ngIf=" _formService.checkFormData(false,'ramdisk', createProduct, submittedCreate)"
+                              [ngSwitch]="_formService.form('ramdisk',createProduct).invalid">
+                  <small *ngSwitchCase="_formService.form('ramdisk', createProduct).hasError('required')"
+                         class="text-muted text-error">Vui lòng nhập thông tin ramdisk</small>
+                </ng-container>
+
+              </div>
+              <div class="form-group mt-3">
+                <label for="monitors">Màn Hình</label>
+                <input [ngClass]="{'is-invalid':  _formService.checkFormData(false,'monitors', createProduct, submittedCreate),
+                       'is-valid':  _formService.checkFormData(true, 'monitors', createProduct)}"
+                       class="form-control" formControlName="monitors" id="monitors" name="monitors" type="text">
+                <ng-container *ngIf=" _formService.checkFormData(false,'monitors', createProduct, submittedCreate)"
+                              [ngSwitch]="_formService.form('monitors',createProduct).invalid">
+                  <small *ngSwitchCase="_formService.form('monitors', createProduct).hasError('required')"
+                         class="text-muted text-error">Vui lòng nhập thông tin màn hình</small>
+                </ng-container>
+
+              </div>
+              <div class="form-group mt-3">
+                <label for="batteryCapacity">Dung Lượng Pin</label>
+                <input [ngClass]="{'is-invalid':  _formService.checkFormData(false,'batteryCapacity', createProduct, submittedCreate),
+                       'is-valid':  _formService.checkFormData(true,'batteryCapacity', createProduct)}"
+                       class="form-control" formControlName="batteryCapacity" id="batteryCapacity"
+                       name="batteryCapacity" type="text">
+                <ng-container
+                  *ngIf=" _formService.checkFormData(false,'batteryCapacity', createProduct, submittedCreate)"
+                  [ngSwitch]="_formService.form('batteryCapacity',createProduct).invalid">
+                  <small *ngSwitchCase="_formService.form('batteryCapacity', createProduct).hasError('required')"
+                         class="text-muted text-error">Vui lòng nhập thông tin dung lượng pin</small>
+                </ng-container>
+              </div>
+              <div class="form-group mt-3">
+                <label for="warranty">Bảo Hành</label>
+                <select [value]="_formService.form('warranty',createProduct)?.value" class="form-control"
+                        formControlName="warranty" id="warranty" name="warranty">
+                  <option>6 Tháng</option>
+                  <option>12 Tháng</option>
+                  <option>24 Tháng</option>
+                  <option>36 Tháng</option>
+                  <option>48 Tháng</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group mt-3">
+                <label for="design">Thiết Kế</label>
+                <input [ngClass]="{'is-invalid':  _formService.checkFormData(false,'design', createProduct, submittedCreate),
+                       'is-valid':  _formService.checkFormData(true,'design', createProduct)}"
+                       class="form-control"
+                       formControlName="design" id="design" name="design" type="text">
+                <ng-container *ngIf=" _formService.checkFormData(false,'design', createProduct, submittedCreate)"
+                              [ngSwitch]="_formService.form('design',createProduct).invalid">
+                  <small *ngSwitchCase="_formService.form('design', createProduct).hasError('required')"
+                         class="text-muted text-error">Vui lòng nhập thông tin thiết kế</small>
+                </ng-container>
+              </div>
+              <div class="form-group mt-3">
+                <label for="sizeAndWeight">Kích Thước và Trọng Lượng</label>
+                <input [ngClass]="{'is-invalid':  _formService.checkFormData(false,'sizeAndWeight', createProduct, submittedCreate),
+                       'is-valid':  _formService.checkFormData(true,'sizeAndWeight', createProduct)}"
+                       class="form-control"
+                       formControlName="sizeAndWeight" id="sizeAndWeight" name="sizeAndWeight" type="text">
+                <ng-container *ngIf=" _formService.checkFormData(false,'sizeAndWeight', createProduct, submittedCreate)"
+                              [ngSwitch]="_formService.form('sizeAndWeight',createProduct).invalid">
+                  <small *ngSwitchCase="_formService.form('sizeAndWeight', createProduct).hasError('required')"
+                         class="text-muted text-error">Vui lòng nhập thông tin kích thước và trọng lượng</small>
+                </ng-container>
+              </div>
+              <div class="form-group mt-3">
+                <label for="operatingSystem">Hệ Điều Hành</label>
+                <input [ngClass]="{'is-invalid':  _formService.checkFormData(false,'operatingSystem', createProduct, submittedCreate),
+                       'is-valid': _formService.checkFormData(true,'operatingSystem', createProduct)}"
+                       class="form-control"
+                       formControlName="operatingSystem" id="operatingSystem"
+                       name="operatingSystem" type="text">
+                <ng-container
+                  *ngIf=" _formService.checkFormData(false,'operatingSystem', createProduct, submittedCreate)"
+                  [ngSwitch]="_formService.form('operatingSystem',createProduct).invalid">
+                  <small *ngSwitchCase="_formService.form('operatingSystem', createProduct).hasError('required')"
+                         class="text-muted text-error">Vui lòng nhập thông tin hệ điều hành</small>
+                </ng-container>
+
+              </div>
+              <div class="form-group mt-3">
+                <label for="gateway">Cổng Kết Nối</label>
+                <input [ngClass]="{'is-invalid':  _formService.checkFormData(false,'gateway', createProduct, submittedCreate),
+                       'is-valid':  _formService.checkFormData(true,'gateway', createProduct)}"
+                       class="form-control"
+                       formControlName="gateway" id="gateway" name="gateway" type="text">
+                <ng-container *ngIf=" _formService.checkFormData(false,'gateway', createProduct, submittedCreate)"
+                              [ngSwitch]="_formService.form('gateway',createProduct).invalid">
+                  <small *ngSwitchCase="_formService.form('gateway', createProduct).hasError('required')"
+                         class="text-muted text-error">Vui lòng nhập thông tin cổng kết nối</small>
+                </ng-container>
+              </div>
+              <div class="row mt-3">
+                <div class="col-md-8">
+                  <div class="form-group">
+                    <label for="launchDate1">Ngày Sản Xuất</label>
+                    <input [ngClass]="{'is-invalid':  _formService.checkFormData(false,'launchDate', createProduct, submittedCreate),
+                           'is-valid': _formService.checkFormData(true, 'launchDate', createProduct)}"
+                           class="form-control"
+                           formControlName="launchDate" id="launchDate1"
+                           name="launchDate" type="number">
+                    <ng-container
+                      *ngIf=" _formService.checkFormData(false,'launchDate', createProduct, submittedCreate)"
+                      [ngSwitch]="_formService.form('launchDate',createProduct).invalid">
+                      <small *ngSwitchCase="_formService.form('launchDate', createProduct).hasError('required')"
+                             class="text-muted text-error">Vui lòng nhập thông tin ngày sản xuất</small>
+                    </ng-container>
+                  </div>
+                </div>
+                <div class="col-md-4"
+                     style="display: flex; align-items: center; justify-content: space-around; margin-top: 20px;">
+                  <div class="form-check form-switch">
+                    <input [checked]="_formService.form('active', createProduct).value" class="form-check-input"
+                           formControlName="active" id="flexSwitchCheckDefault1" type="checkbox">
+                    <label class="form-check-label" for="flexSwitchCheckDefault1">Active</label>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group mt-3" formGroupName="category">
+                <label for="category">Thể Loại</label>
+                <select class="form-control" formControlName="cId" id="category" name="category">
+                  <option *ngFor="let item of category" [value]="item.cId">{{item.name}}</option>
+                </select>
+              </div>
+              <div class="form-group mt-3" formGroupName="manufacturer">
+                <label for="manufacturer">Hãng Sản Xuất</label>
+                <select class="form-control" formControlName="id" id="manufacturer" name="manufacturer">
+                  <option *ngFor="let item of manufacturer" [value]="item.id">{{item.name}}</option>
+                </select>
+              </div>
+              <div class="form-group mt-3">
+                <label for="KeyboardLights">Đèn Bàn Phím</label>
+                <select class="form-control" formControlName="keyboardLights" id="KeyboardLights" name="KeyboardLights">
+                  <option>Không</option>
+                  <option>LED RGB</option>
+                  <option>LED đơn sắc</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="form-group mt-3">
+            <label for="insights">Mô Tả</label>
+            <textarea [ngClass]="{'is-invalid':  _formService.checkFormData(false,'insights', createProduct, submittedCreate),
+                      'is-valid':  _formService.checkFormData(true,'insights', createProduct)}"
+                      class="form-control"
+                      formControlName="insights" id="insights" name="insights"
+                      rows="5"></textarea>
+            <ng-container *ngIf=" _formService.checkFormData(false,'insights', createProduct, submittedCreate)"
+                          [ngSwitch]="_formService.form('insights',createProduct).invalid">
+              <small *ngSwitchCase="_formService.form('insights', createProduct).hasError('required')"
+                     class="form-text text-muted text-error">Vui lòng nhập thông tin mô tả sản phẩm</small>
+            </ng-container>
+
+          </div>
+          <div class="image-form mt-3">
+            <div class="row">
+              <div class="col-md-6 d-flex align-items-center" style="border: 1px solid #ccc; border-radius: 4px">
+                <div class="form-group m-2" formGroupName="imageUrl" style="display: flex;flex-direction: column;">
+                  <label class="span-file" for="image-product">Chọn Ảnh Sản Phẩm</label>
+                  <input (change)="uploadFiles($event.target)" accept="image/jpeg, image/png,image/jpg"
+                         class="form-control-file" formControlName="imageUrl"
+                         hidden id="image-product" multiple name="image-product" type="file">
+                  <ng-container
+                    *ngIf="(!this.submittedCreate && createProduct.get('imageUrl')?.get('imageUrl')?.invalid) ||
+                  (createProduct.get('imageUrl')?.get('imageUrl')?.invalid
+                  && (createProduct.get('imageUrl')?.get('imageUrl')?.touched
+                  || createProduct.get('imageUrl')?.get('imageUrl')?.dirty))"
+                    [ngSwitch]="createProduct.get('imageUrl')?.get('imageUrl')?.invalid">
+                    <small *ngSwitchCase="createProduct.get('imageUrl')?.get('imageUrl')?.hasError('required')"
+                           class="form-text text-muted text-error">Vui lòng thêm ảnh cho sản phẩm</small>
+                  </ng-container>
+                </div>
+              </div>
+              <div class="col-md-6 pr-2">
+                <div class="form-group">
+                  <label for="price">Giá Sản Phẩm</label>
+                  <input aria-describedby="helpId" class="form-control" formControlName="price" id="price" name="price"
+                         placeholder="" type="text">
+                  <small class="text-muted" id="helpId">Help text</small>
+                </div>
+              </div>
+            </div>
+            <div class="image-child">
+              <ng-container *ngIf="localUrl != null">
+                <img *ngFor="let item of localUrl" alt="" class="img-product" src="{{item.imageUrl}}">
+              </ng-container>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button #closeFormCreate class="btn btn-secondary" data-bs-dismiss="modal" type="button">Đóng</button>
+        <button (click)="createProductBtn()" class="btn btn-primary" type="button">Thêm</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal update product-->
+<div aria-hidden="true" aria-labelledby="update-product-label" class="modal fade" data-bs-backdrop="static"
+     id="update-product" tabindex="-1">
+  <!--upload image on firebase-->
+  <div *ngIf="uploadStatus" class="upload">
+    <div class="upload-icon">
+      <div class="d-flex justify-content-center align-items-center">
+        <div class="spinner-grow text-primary" role="status">
+          <span class="sr-only">Loading...</span>
+        </div>
+
+      </div>
+      <span class="text-center">Đang tải ảnh...</span>
+    </div>
+  </div>
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="update-product-label">Form Thêm Sản Phẩm</h5>
+        <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="updateProduct">
+          <!--          <div class="image-main">-->
+          <!--            <img alt="" height="100px" src="{{imageMain}}" width="100px">-->
+          <!--            <div class="form-group"-->
+          <!--                 style="display: flex; flex-direction: column; padding-top: 10px; justify-content: center">-->
+          <!--              <label for="iamgemain1" style="color: #146c43; cursor: pointer;">Chọn Ảnh Sản Phẩm</label>-->
+          <!--              <input (change)="EventImageMain($event.target)" aria-describedby="fileHelpId" class="form-control-file"-->
+          <!--                     hidden id="iamgemain1" name="iamgemain"-->
+          <!--                     type="file">-->
+          <!--              <ng-container *ngIf="imageMain == null && !submittedCreate">-->
+          <!--                <small class="form-text text-muted text-error">Vui lòng chon ảnh chính cho sản-->
+          <!--                  phẩm</small>-->
+          <!--              </ng-container>-->
+          <!--            </div>-->
+          <!--          </div>-->
+          <!--          <hr>-->
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group mt-3">
+                <label for="nameProduct1">Tên Sản Phẩm</label>
+                <input [ngClass]="{'is-invalid': _formService.checkFormData(false,'name', updateProduct, submittedUpdate),
+               'is-valid': _formService.checkFormData(true,'name', updateProduct)}" class="form-control"
+                       formControlName="name" id="nameProduct1" name="nameProduct" type="text">
+                <ng-container *ngIf="_formService.checkFormData(false,'name', updateProduct, submittedUpdate)"
+                              [ngSwitch]="_formService.form('name', updateProduct).invalid">
+                  <small *ngSwitchCase="_formService.form('name', updateProduct).hasError('required')"
+                         class="text-muted text-error">Vui lòng nhập thông tin tên sản phẩm</small>
+                </ng-container>
+              </div>
+              <div class="form-group mt-3">
+                <label for="cpu1">CPU</label>
+                <input [ngClass]="{'is-invalid':  _formService.checkFormData(false,'cpu', updateProduct, submittedUpdate),
+                       'is-valid':  _formService.checkFormData(true,'cpu', updateProduct)}"
+                       class="form-control" formControlName="cpu"
+                       id="cpu1" name="cpu" type="text">
+                <ng-container *ngIf=" _formService.checkFormData(false,'cpu', updateProduct, submittedUpdate)"
+                              [ngSwitch]="_formService.form('cpu',updateProduct).invalid">
+                  <small *ngSwitchCase="_formService.form('cpu',updateProduct).hasError('required')"
+                         class="text-muted text-error">Vui lòng nhập thông tin cpu</small>
+                </ng-container>
+              </div>
+              <div class="form-group mt-3">
+                <label for="gpu1">GPU</label>
+                <input [ngClass]="{'is-invalid':  _formService.checkFormData(false,'gpu', updateProduct, submittedUpdate),
+                       'is-valid':  _formService.checkFormData(true,'gpu', updateProduct)}"
+                       class="form-control" formControlName="gpu"
+                       id="gpu1" name="gpu" type="text">
+                <ng-container *ngIf=" _formService.checkFormData(false,'gpu', updateProduct, submittedUpdate)"
+                              [ngSwitch]="_formService.form('gpu',updateProduct).invalid">
+                  <small *ngSwitchCase="_formService.form('gpu', updateProduct).hasError('required')"
+                         class="text-muted text-error">Vui lòng nhập thông tin gpu</small>
+                </ng-container>
+              </div>
+              <div class="form-group mt-3">
+                <label for="hardDiskDrive1">Ổ Cứng</label>
+                <input [ngClass]="{'is-invalid':  _formService.checkFormData(false,'hardDiskDrive', updateProduct, submittedUpdate),
+                'is-valid': _formService.checkFormData(true,'hardDiskDrive', updateProduct)}" class="form-control"
+                       formControlName="hardDiskDrive" id="hardDiskDrive1" name="hardDiskDrive" type="text">
+                <ng-container *ngIf=" _formService.checkFormData(false,'hardDiskDrive', updateProduct, submittedUpdate)"
+                              [ngSwitch]="_formService.form('hardDiskDrive',updateProduct).invalid">
+                  <small *ngSwitchCase="_formService.form('hardDiskDrive', updateProduct).hasError('required')"
+                         class="text-muted text-error">Vui lòng nhập thông tin ổ cứng</small>
+                </ng-container>
+              </div>
+              <div class="form-group mt-3">
+                <label for="ram1">Ram</label>
+                <input [ngClass]="{'is-invalid':  _formService.checkFormData(false,'ramdisk', updateProduct, submittedUpdate),
+                'is-valid': _formService.checkFormData(true,'ramdisk', updateProduct)}" class="form-control"
+                       formControlName="ramdisk" id="ram1"
+                       name="ram" type="text">
+                <ng-container *ngIf=" _formService.checkFormData(false,'ramdisk', updateProduct, submittedUpdate)"
+                              [ngSwitch]="_formService.form('ramdisk',updateProduct).invalid">
+                  <small *ngSwitchCase="_formService.form('ramdisk', updateProduct).hasError('required')"
+                         class="text-muted text-error">Vui lòng nhập thông tin ramdisk</small>
+                </ng-container>
+
+              </div>
+              <div class="form-group mt-3">
+                <label for="monitors1">Màn Hình</label>
+                <input [ngClass]="{'is-invalid':  _formService.checkFormData(false,'monitors', updateProduct, submittedUpdate),
+                       'is-valid':  _formService.checkFormData(true, 'monitors', updateProduct)}"
+                       class="form-control" formControlName="monitors" id="monitors1" name="monitors" type="text">
+                <ng-container *ngIf=" _formService.checkFormData(false,'monitors', updateProduct, submittedUpdate)"
+                              [ngSwitch]="_formService.form('monitors',updateProduct).invalid">
+                  <small *ngSwitchCase="_formService.form('monitors', updateProduct).hasError('required')"
+                         class="text-muted text-error">Vui lòng nhập thông tin màn hình</small>
+                </ng-container>
+
+              </div>
+              <div class="form-group mt-3">
+                <label for="batteryCapacity1">Dung Lượng Pin</label>
+                <input [ngClass]="{'is-invalid':  _formService.checkFormData(false,'batteryCapacity', updateProduct, submittedUpdate),
+                       'is-valid':  _formService.checkFormData(true,'batteryCapacity', updateProduct)}"
+                       class="form-control" formControlName="batteryCapacity" id="batteryCapacity1"
+                       name="batteryCapacity" type="text">
+                <ng-container
+                  *ngIf=" _formService.checkFormData(false,'batteryCapacity', updateProduct, submittedUpdate)"
+                  [ngSwitch]="_formService.form('batteryCapacity',updateProduct).invalid">
+                  <small *ngSwitchCase="_formService.form('batteryCapacity', updateProduct).hasError('required')"
+                         class="text-muted text-error">Vui lòng nhập thông tin dung lượng pin</small>
+                </ng-container>
+              </div>
+              <div class="form-group mt-3">
+                <label for="warranty1">Bảo Hành</label>
+                <select [value]="_formService.form('warranty',updateProduct)?.value" class="form-control"
+                        formControlName="warranty" id="warranty1" name="warranty">
+                  <option>6 Tháng</option>
+                  <option>12 Tháng</option>
+                  <option>24 Tháng</option>
+                  <option>36 Tháng</option>
+                  <option>48 Tháng</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group mt-3">
+                <label for="design1">Thiết Kế</label>
+                <input [ngClass]="{'is-invalid':  _formService.checkFormData(false,'design', updateProduct, submittedUpdate),
+                       'is-valid':  _formService.checkFormData(true,'design', updateProduct)}"
+                       class="form-control"
+                       formControlName="design" id="design1" name="design" type="text">
+                <ng-container *ngIf=" _formService.checkFormData(false,'design', updateProduct, submittedUpdate)"
+                              [ngSwitch]="_formService.form('design',updateProduct).invalid">
+                  <small *ngSwitchCase="_formService.form('design', updateProduct).hasError('required')"
+                         class="text-muted text-error">Vui lòng nhập thông tin thiết kế</small>
+                </ng-container>
+              </div>
+              <div class="form-group mt-3">
+                <label for="sizeAndWeight1">Kích Thước và Trọng Lượng</label>
+                <input [ngClass]="{'is-invalid':  _formService.checkFormData(false,'sizeAndWeight', updateProduct, submittedUpdate),
+                       'is-valid':  _formService.checkFormData(true,'sizeAndWeight', updateProduct)}"
+                       class="form-control"
+                       formControlName="sizeAndWeight" id="sizeAndWeight1" name="sizeAndWeight" type="text">
+                <ng-container *ngIf=" _formService.checkFormData(false,'sizeAndWeight', updateProduct, submittedUpdate)"
+                              [ngSwitch]="_formService.form('sizeAndWeight',updateProduct).invalid">
+                  <small *ngSwitchCase="_formService.form('sizeAndWeight', updateProduct).hasError('required')"
+                         class="text-muted text-error">Vui lòng nhập thông tin kích thước và trọng lượng</small>
+                </ng-container>
+              </div>
+              <div class="form-group mt-3">
+                <label for="operatingSystem1">Hệ Điều Hành</label>
+                <input [ngClass]="{'is-invalid':  _formService.checkFormData(false,'operatingSystem', updateProduct, submittedUpdate),
+                       'is-valid': _formService.checkFormData(true,'operatingSystem', updateProduct)}"
+                       class="form-control"
+                       formControlName="operatingSystem" id="operatingSystem1"
+                       name="operatingSystem" type="text">
+                <ng-container
+                  *ngIf=" _formService.checkFormData(false,'operatingSystem', updateProduct, submittedUpdate)"
+                  [ngSwitch]="_formService.form('operatingSystem',updateProduct).invalid">
+                  <small *ngSwitchCase="_formService.form('operatingSystem', updateProduct).hasError('required')"
+                         class="text-muted text-error">Vui lòng nhập thông tin hệ điều hành</small>
+                </ng-container>
+
+              </div>
+              <div class="form-group mt-3">
+                <label for="gateway1">Cổng Kết Nối</label>
+                <input [ngClass]="{'is-invalid':  _formService.checkFormData(false,'gateway', updateProduct, submittedUpdate),
+                       'is-valid':  _formService.checkFormData(true,'gateway', updateProduct)}"
+                       class="form-control"
+                       formControlName="gateway" id="gateway1" name="gateway" type="text">
+                <ng-container *ngIf=" _formService.checkFormData(false,'gateway', updateProduct, submittedUpdate)"
+                              [ngSwitch]="_formService.form('gateway',updateProduct).invalid">
+                  <small *ngSwitchCase="_formService.form('gateway', updateProduct).hasError('required')"
+                         class="text-muted text-error">Vui lòng nhập thông tin cổng kết nối</small>
+                </ng-container>
+              </div>
+              <div class="row mt-3">
+                <div class="col-md-8">
+                  <div class="form-group">
+                    <label for="launchDate">Năm Sản Xuất</label>
+                    <input [ngClass]="{'is-invalid':  _formService.checkFormData(false,'launchDate', updateProduct, submittedUpdate),
+                           'is-valid': _formService.checkFormData(true, 'launchDate', updateProduct)}"
+                           class="form-control"
+                           formControlName="launchDate" id="launchDate"
+                           name="launchDate" type="number">
+                    <ng-container
+                      *ngIf=" _formService.checkFormData(false,'launchDate', updateProduct, submittedUpdate)"
+                      [ngSwitch]="_formService.form('launchDate',updateProduct).invalid">
+                      <small *ngSwitchCase="_formService.form('launchDate', updateProduct).hasError('required')"
+                             class="text-muted text-error">Vui lòng nhập thông tin ngày sản xuất</small>
+                    </ng-container>
+                  </div>
+                </div>
+                <div class="col-md-4"
+                     style="display: flex; align-items: center; justify-content: space-around; margin-top: 20px;">
+                  <div class="form-check form-switch">
+                    <input [checked]="_formService.form('active', updateProduct).value" class="form-check-input"
+                           formControlName="active" id="flexSwitchCheckDefault" type="checkbox">
+                    <label class="form-check-label" for="flexSwitchCheckDefault">Active</label>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group mt-3" formGroupName="category">
+                <label for="category1">Thể Loại</label>
+                <select class="form-control" formControlName="cId" id="category1" name="category">
+                  <option *ngFor="let item of category" [value]="item.cId">{{item.name}}</option>
+                </select>
+              </div>
+              <div class="form-group mt-5" formGroupName="manufacturer">
+                <label for="manufacturer1">Hãng Sản Xuất</label>
+                <select class="form-control" formControlName="id" id="manufacturer1" name="manufacturer">
+                  <option *ngFor="let item of manufacturer" [value]="item.id">{{item.name}}</option>
+                </select>
+              </div>
+              <div class="form-group mt-5">
+                <label for="KeyboardLights1">Đèn Bàn Phím</label>
+                <select class="form-control" formControlName="keyboardLights" id="KeyboardLights1"
+                        name="KeyboardLights">
+                  <option>Không</option>
+                  <option>LED RGB</option>
+                  <option>LED đơn sắc</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="form-group mt-3">
+            <label for="insights1">Mô Tả</label>
+            <textarea [ngClass]="{'is-invalid':  _formService.checkFormData(false,'insights', updateProduct, submittedUpdate),
+                      'is-valid':  _formService.checkFormData(true,'insights', updateProduct)}"
+                      class="form-control"
+                      formControlName="insights" id="insights1" name="insights"
+                      rows="5"></textarea>
+            <ng-container *ngIf=" _formService.checkFormData(false,'insights', updateProduct, submittedUpdate)"
+                          [ngSwitch]="_formService.form('insights',updateProduct).invalid">
+              <small *ngSwitchCase="_formService.form('insights', updateProduct).hasError('required')"
+                     class="form-text text-muted text-error">Vui lòng nhập thông tin mô tả sản phẩm</small>
+            </ng-container>
+
+          </div>
+          <div class="image-form mt-3">
+            <div class="row">
+              <div class="col-md-6 d-flex align-items-center" style="border: 1px solid #ccc; border-radius: 4px">
+                <div class="form-group m-2" style="display: flex;flex-direction: column;">
+                  <label class="span-file" for="image-product1">Chọn Ảnh Sản Phẩm</label>
+                  <input (change)="uploadFiles($event.target)" accept="image/jpeg, image/png,image/jpg"
+                         class="form-control-file" hidden id="image-product1" multiple name="image-product" type="file">
+                  <ng-container *ngIf="localUrl == null && !submittedUpdate">
+                    <small class="form-text text-muted text-error">Vui lòng thêm ảnh cho sản phẩm</small>
+                  </ng-container>
+                </div>
+              </div>
+              <div class="col-md-6 pr-2">
+                <div class="form-group">
+                  <label for="price1">Giá Sản Phẩm</label>
+                  <input aria-describedby="helpId" class="form-control" formControlName="price" id="price1" name="price"
+                         type="text">
+                  <small class="text-muted">Help text</small>
+                </div>
+              </div>
+            </div>
+            <div class="image-child">
+              <ng-container *ngIf="localUrl != null">
+                <div *ngFor="let item of localUrl" class="image-list">
+                  <span (click)="deleteImageById(item.ip_id)" class="del-img">&times;</span>
+                  <img alt="" class="img-product-update" src="{{item.imageUrl}}">
+                </div>
+              </ng-container>
+            </div>
+
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button #closeFormUpdate class="btn btn-secondary" data-bs-dismiss="modal" type="button">Đóng</button>
+        <button (click)="updateProductBtn()" class="btn btn-primary" type="button">Cập Nhật</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+

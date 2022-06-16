@@ -1,0 +1,43 @@
+/*@media (min-width: 1500px) {*/
+/*  #info-cart-xxl.modal-xl {*/
+/*    max-width: 1450px;*/
+/*  }*/
+/*}*/
+table#info_order tbody tr td {
+  border-bottom: 1px solid #59ab6e;
+}
+
+thead {
+  flex: 0 0 auto;
+}
+
+table.table-detail tbody {
+  flex: 1 1 auto;
+  display: block;
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: 300px;
+}
+
+table.table-detail tr {
+  width: 100%;
+  display: table;
+  table-layout: fixed;
+}
+
+/* width */
+table.table-detail tbody::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+table.table-detail tbody::-webkit-scrollbar-track {
+  /* box-shadow: inset 0 0 2px grey; */
+  border-radius: 10px;
+}
+
+/* Handle */
+table.table-detail tbody::-webkit-scrollbar-thumb {
+  background: grey;
+  border-radius: 10px;
+}

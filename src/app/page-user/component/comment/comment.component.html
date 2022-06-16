@@ -1,0 +1,112 @@
+<div class="container" style="margin-bottom: 30px;">
+  <div class="row height d-flex justify-content-center align-items-center">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="p-3" style="border-top: 2px solid #35b69f;">
+          <h6>Bình Luận</h6>
+        </div>
+
+        <form action="#">
+          <div class="mt-3 d-flex flex-row align-items-center p-3 form-color comment">
+            <img class="rounded-circle mr-2" src="https://i.imgur.com/zQZSWrt.jpg" width="50">
+            <input [attr.coid]="" class="form-control" maxlength="150"
+                   placeholder="Enter your comment..." type="text">
+            <button (click)="createComment($event)" class="btn btn-primary"
+                    style="margin-left: 10px; width: 120px;">
+              Bình Luận
+            </button>
+          </div>
+        </form>
+
+
+        <div class="mt-2">
+          <ng-container *ngIf="commentList.length > 0">
+            <ng-container *ngFor="let comment of commentList | sort | paginate: {itemsPerPage: 5, currentPage: page}">
+              <div class="display-form-chat">
+                <div class="d-flex flex-row p-3" style="padding-bottom: 0 !important;">
+                  <img [src]="comment.user.imageUrl" alt="" class="rounded-circle mr-3"
+                       height="40" width="40">
+                  <div class="w-100">
+                    <div class="d-flex justify-content-between align-items-center">
+                      <div class="d-flex flex-row align-items-center">
+                        <span class="mr-2">{{comment.user.fullName}}</span>
+                      </div>
+                      <small>{{this.getTimeComment(comment.commentDate.toString())}}</small>
+                    </div>
+
+                    <p class="text-justify comment-text mb-0">{{comment.content}}</p>
+                    <div class="d-flex flex-row user-feed justify-content-end">
+                      <button (click)="openReply($event)" class="ml-3 btn btn-primary">
+                        <i class="fas fa-reply" style="margin-right: 5px;"></i>
+                        Trả Lời
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <form action="#" class="comment-form">
+                  <div class="mt-3 d-flex flex-row align-items-center p-3 form-color"
+                       style="background-color: transparent;">
+                    <img class="rounded-circle mr-2" src="https://i.imgur.com/zQZSWrt.jpg" width="50">
+                    <input [attr.coid]="comment.commentId" [attr.uid]="comment.user.id" class="form-control"
+                           maxlength="150" placeholder="Enter your comment..."
+                           type="text">
+                    <button (click)="createComment($event)" class="btn btn-primary"
+                            style="margin-left: 10px; width: 120px;">
+                      Bình Luận
+                    </button>
+                  </div>
+                </form>
+              </div>
+              <!-- start reply -->
+              <ng-container *ngIf="comment.commentDetailsList.length > 0">
+                <div *ngFor="let item of comment.commentDetailsList" class="row">
+                  <div class="col-md-11 offset-md-1 display-form-chat">
+                    <div class="d-flex flex-row p-3" style="padding-bottom: 0 !important;">
+                      <img [src]="item.userReply.imageUrl" class="rounded-circle mr-3" height="40"
+                           width="40">
+                      <div class="w-100">
+                        <div class="d-flex justify-content-between align-items-center">
+                          <div class="d-flex flex-row align-items-center">
+                            <span class="mr-2" style="margin-right: 10px;">{{item.userReply.fullName}}</span>
+                            <span style="margin-right: 10px;">>></span>
+                            <small class="name-badge">{{comment.user.fullName}}</small>
+                          </div>
+                          <small>{{this.getTimeComment(item.commentDateReply.toString())}}</small>
+                        </div>
+                        <p class="text-justify comment-text mb-0">{{item.comment}}</p>
+
+                        <div class="d-flex flex-row user-feed justify-content-end">
+                          <button (click)="openReply($event)" class="ml-3 btn btn-primary">
+                            <i class="fas fa-reply" style="margin-right: 10px;"></i>
+                            Trả Lời
+                          </button>
+                        </div>
+
+                      </div>
+                    </div>
+                    <form action="#" class="comment-form">
+                      <div class="mt-3 d-flex flex-row align-items-center p-3 form-color"
+                           style="background-color: transparent;">
+                        <img class="rounded-circle mr-2" src="https://i.imgur.com/zQZSWrt.jpg" width="50">
+                        <input [attr.coid]="item.comment.commentId" [attr.uid]="item.userReply.id" class="form-control"
+                               maxlength="150" placeholder="Enter your comment..."
+                               type="text">
+                        <button (click)="createComment($event)" class="btn btn-primary"
+                                style="margin-left: 10px; width: 120px;">
+                          Bình Luận
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </ng-container>
+            </ng-container>
+          </ng-container>
+        </div>
+        <ng-container *ngIf="commentList.length > 5">
+          <pagination-controls (pageChange)="page=$event"></pagination-controls>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>

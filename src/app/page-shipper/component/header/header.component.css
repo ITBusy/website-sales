@@ -1,0 +1,9 @@
+.logout {
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.logout:hover {
+  color: #59ab6e;
+}
+
