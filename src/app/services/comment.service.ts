@@ -1,6 +1,6 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {CommentInterface} from '../entity/entity';
+import {CommentDetailsInterface, CommentInterface} from '../entity/entity';
 import {catchError, map, Observable, throwError} from "rxjs";
 import baseUrl from "./baseUrl";
 
@@ -23,6 +23,13 @@ export class CommentService {
     return this._http.get<any>(`${baseUrl}/comment/product/${pid}`).pipe(
       map(res => res.data),
       catchError(err => throwError(err))
+    );
+  }
+
+  public createCommentDetail(commentDetail: CommentDetailsInterface): Observable<any> {
+    return this._http.post<any>(`${baseUrl}/comment-detail/`, commentDetail).pipe(
+      map(result => result),
+      catchError(err => throwError(err.error))
     );
   }
 }

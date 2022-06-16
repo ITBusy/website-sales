@@ -8,7 +8,7 @@
 
         <form action="#">
           <div class="mt-3 d-flex flex-row align-items-center p-3 form-color comment">
-            <img class="rounded-circle mr-2" src="https://i.imgur.com/zQZSWrt.jpg" width="50">
+            <img [src]="_loginService.getUser().imageUrl" class="rounded-circle mr-2" height="50" width="50">
             <input [attr.coid]="" class="form-control" maxlength="150"
                    placeholder="Enter your comment..." type="text">
             <button (click)="createComment($event)" class="btn btn-primary"
@@ -22,8 +22,9 @@
         <div class="mt-2">
           <ng-container *ngIf="commentList.length > 0">
             <ng-container *ngFor="let comment of commentList | sort | paginate: {itemsPerPage: 5, currentPage: page}">
-              <div class="display-form-chat">
-                <div class="d-flex flex-row p-3" style="padding-bottom: 0 !important;">
+              <div class="display-form-chat"
+                   style="border: 2px solid #ccc; border-radius: 5px; margin-bottom: 20px">
+                <div class="d-flex flex-row p-3">
                   <img [src]="comment.user.imageUrl" alt="" class="rounded-circle mr-3"
                        height="40" width="40">
                   <div class="w-100">
@@ -60,20 +61,21 @@
               <!-- start reply -->
               <ng-container *ngIf="comment.commentDetailsList.length > 0">
                 <div *ngFor="let item of comment.commentDetailsList" class="row">
-                  <div class="col-md-11 offset-md-1 display-form-chat">
-                    <div class="d-flex flex-row p-3" style="padding-bottom: 0 !important;">
-                      <img [src]="item.userReply.imageUrl" class="rounded-circle mr-3" height="40"
+                  <div class="col-md-11 offset-md-1 display-form-chat"
+                       style="border: 2px solid #ccc; border-radius: 5px; margin-bottom: 20px; width: 1200px;">
+                    <div class="d-flex flex-row p-3">
+                      <img [src]="item.user.imageUrl" class="rounded-circle mr-3" height="40"
                            width="40">
                       <div class="w-100">
                         <div class="d-flex justify-content-between align-items-center">
                           <div class="d-flex flex-row align-items-center">
-                            <span class="mr-2" style="margin-right: 10px;">{{item.userReply.fullName}}</span>
+                            <span class="mr-2" style="margin-right: 10px;">{{item.user.fullName}}</span>
                             <span style="margin-right: 10px;">>></span>
-                            <small class="name-badge">{{comment.user.fullName}}</small>
+                            <small class="name-badge">{{item.userReply.fullName}}</small>
                           </div>
                           <small>{{this.getTimeComment(item.commentDateReply.toString())}}</small>
                         </div>
-                        <p class="text-justify comment-text mb-0">{{item.comment}}</p>
+                        <p class="text-justify comment-text mb-0">{{item.content_reply}}</p>
 
                         <div class="d-flex flex-row user-feed justify-content-end">
                           <button (click)="openReply($event)" class="ml-3 btn btn-primary">
@@ -88,7 +90,7 @@
                       <div class="mt-3 d-flex flex-row align-items-center p-3 form-color"
                            style="background-color: transparent;">
                         <img class="rounded-circle mr-2" src="https://i.imgur.com/zQZSWrt.jpg" width="50">
-                        <input [attr.coid]="item.comment.commentId" [attr.uid]="item.userReply.id" class="form-control"
+                        <input [attr.coid]="item.comment.commentId" [attr.uid]="item.user.id" class="form-control"
                                maxlength="150" placeholder="Enter your comment..."
                                type="text">
                         <button (click)="createComment($event)" class="btn btn-primary"

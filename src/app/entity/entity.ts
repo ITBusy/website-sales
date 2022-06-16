@@ -131,7 +131,8 @@ export interface CommentDetailsInterface {
   comment: {
     commentId: number,
   }
-  userReply: UserInterface
+  userReply: UserInterface,
+  user: UserInterface
 }
 
 export interface CommentDtoInterface {

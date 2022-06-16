@@ -1,35 +1,36 @@
 $(document).ready(function () {
-  $('#carousel-related-product').slick({
-    infinite: true,
-    arrows: false,
-    slidesToShow: 4,
-    slidesToScroll: 3,
-    dots: true,
-    responsive: [{
-      breakpoint: 1024,
-      settings: {
-        slidesToShow: 3,
-        slidesToScroll: 3
-      }
-    },
-      {
-        breakpoint: 600,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 3
-        }
-      },
-      {
-        breakpoint: 480,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 3
-        }
-      }
-    ]
-  });
+  // $('#carousel-related-product').slick({
+  //   infinite: true,
+  //   arrows: false,
+  //   slidesToShow: 4,
+  //   slidesToScroll: 3,
+  //   dots: true,
+  //   responsive: [{
+  //     breakpoint: 1024,
+  //     settings: {
+  //       slidesToShow: 3,
+  //       slidesToScroll: 3
+  //     }
+  //   },
+  //     {
+  //       breakpoint: 600,
+  //       settings: {
+  //         slidesToShow: 2,
+  //         slidesToScroll: 3
+  //       }
+  //     },
+  //     {
+  //       breakpoint: 480,
+  //       settings: {
+  //         slidesToShow: 2,
+  //         slidesToScroll: 3
+  //       }
+  //     }
+  //   ]
+  // });
   $('.display-form-chat').each(function (index, element) {
     $(this).click(function (e) {
+      alert("sadada")
       $('.display-form-chat form.comment-form').removeClass('active');
       let reply_box = $(e.currentTarget).find('.comment-form');
       $(reply_box).addClass('active');
