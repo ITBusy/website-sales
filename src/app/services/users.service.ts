@@ -18,6 +18,13 @@ export class UsersService {
     );
   }
 
+  public createUserClient(user: any, code: string): Observable<any> {
+    return this._http.post<any>(`${baseUrl}/user/create-user/client/${code}`, user).pipe(
+      map((res: any) => res),
+      catchError((err) => throwError(err.error))
+    );
+  }
+
   public getAllUsers(): Observable<ResponseObject> {
     return this._http.get<ResponseObject>(`${baseUrl}/user/`).pipe(
       map((res) => res),
@@ -42,6 +49,13 @@ export class UsersService {
   public loadShipper(): Observable<any> {
     return this._http.get<any>(`${baseUrl}/user/role-name`).pipe(
       map((res) => res.data),
+      catchError((err) => throwError(err.error))
+    );
+  }
+
+  public checkData(username: string, email: string): Observable<any> {
+    return this._http.get<any>(`${baseUrl}/user/check?username=${username}&email=${email}`).pipe(
+      map((res) => res),
       catchError((err) => throwError(err.error))
     );
   }

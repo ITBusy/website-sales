@@ -30,7 +30,6 @@ export class CategoryComponent implements OnInit {
 
   ngOnInit(): void {
     this.manufacturerID = this._activatedRoute.snapshot.queryParams['manufacturer'];
-    console.log(this.manufacturerID)
     if (this.manufacturerID === undefined) {
       this.getAllProducts();
     } else {

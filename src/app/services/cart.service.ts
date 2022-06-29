@@ -119,4 +119,11 @@ export class CartService {
       catchError(err => throwError(err))
     );
   }
+
+  public turnoverOrder(month: number, year: number): Observable<any> {
+    return this._http.get<any>(`${baseUrl}/order/turnover/Completed/${month}/${year}`).pipe(
+      map(result => result.data),
+      catchError(err => throwError(err))
+    );
+  }
 }

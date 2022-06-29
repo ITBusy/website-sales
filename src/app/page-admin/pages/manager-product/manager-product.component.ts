@@ -37,6 +37,8 @@ export class ManagerProductComponent implements OnInit {
   public products: ProductDtoInterface[] = [];
   public imageMain: string;
   public imageMainFile: File;
+  public productInfo: ProductDtoInterface;
+  public gateway: string[];
 
   constructor(private _storage: AngularFireStorage,
               private _fb: FormBuilder,
@@ -348,6 +350,41 @@ export class ManagerProductComponent implements OnInit {
 
   reset() {
     this.localUrl = [];
+  }
+
+  updateActiveProduct(item: ProductDtoInterface) {
+    if (item.active) {
+      Swal.fire({
+        title: 'Yêu Cầu Xác Nhận Xoá',
+        input: 'text',
+        html: `Please enter <span style="color: #59ab6e; font-weight: bold">${item.name}<span/>`,
+        inputPlaceholder: 'Enter your product name'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          if (result.value == '') {
+            alert("Xoá Thất Bại");
+          } else if (result.value == item.name) {
+            item.active = false;
+            this._productService.updateActiveProduct(item).subscribe(() => {
+              alert(`Xoá sản phẩm ${result.value} thành công`);
+              this.getAllProducts();
+            });
+          } else {
+            alert("Tên Xoá Phẩm Không Trùng Khớp");
+          }
+        }
+      })
+    } else {
+      item.active = true;
+      this._productService.updateActiveProduct(item).subscribe((result) => {
+        alert(`Khôi Phục sản phẩm ${result.data.name} thành công`);
+      })
+    }
+  }
+
+  infoProduct(item: ProductDtoInterface) {
+    this.productInfo = item;
+    this.gateway = item.gateway.split(";");
   }
 
   private getDataUpdate(localUrl: ImageProductsInterface[]): ProductDtoInterface {

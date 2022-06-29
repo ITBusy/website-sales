@@ -126,11 +126,54 @@
 
     </div>
     <!-- Submit button -->
-    <button class="btn btn-primary btn-block mb-2" type="submit">Đăng Ký</button>
+    <button [disabled]="this.register.invalid" class="btn btn-primary btn-block mb-2" id="btnShowModal" type="submit">
+      Đăng Ký
+    </button>
 
     <!-- Login buttons -->
     <div class="text-center">
       <p style="color: #fff">Bạn đã có tài khoản <a [routerLink]="['/account/login']">Đăng Nhập</a></p>
     </div>
   </form>
+</div>
+
+
+<!-- Modal code confirm-->
+<div aria-hidden="true" aria-labelledby="staticBackdropLabel" class="modal fade" data-bs-backdrop="static"
+     data-bs-keyboard="false"
+     id="code-confirmation"
+     key="code-confirmation" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+        <button #closeModalConfirm aria-label="Close" class="btn-close" data-bs-dismiss="modal" hidden
+                type="button"></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="codeConfirm">Mã Xác Nhận</label>
+          <input [(ngModel)]="code" aria-describedby="helpId" class="form-control" id="codeConfirm" maxlength="6"
+                 name="codeConfirm"
+                 placeholder="" type="text">
+          <small #messageError class="text-muted" style="color:red !important"></small>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <!--        <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Close</button>-->
+        <button (click)="confirmation()" *ngIf="code?.length == 6" class="btn btn-primary" type="button">Xác Nhận
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div *ngIf="spinner" class="loading">
+  <div class="spinner">
+    <button class="btn btn-primary" disabled type="button">
+      <span aria-hidden="true" class="spinner-grow spinner-grow-sm" role="status"></span>
+      Đang gửi email...
+    </button>
+  </div>
 </div>

@@ -1,9 +1,12 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators,} from '@angular/forms';
 import {Router} from '@angular/router';
-import {ResponseObject} from 'src/app/entity/entity';
-import Swal from 'sweetalert2';
 import {UsersService} from "../../services/users.service";
+import {SendMailService} from "../../services/send-mail.service";
+import {ResponseObject} from "../../entity/entity";
+import Swal from "sweetalert2";
+//
+declare var $: any;
 
 @Component({
   selector: 'app-register',
@@ -13,11 +16,16 @@ import {UsersService} from "../../services/users.service";
 export class RegisterComponent implements OnInit {
   submitted = true;
   register: FormGroup;
+  @ViewChild('messageError') messageError: ElementRef;
+  @ViewChild('closeModalConfirm') closeModalConfirm: ElementRef;
+  code: string;
+  public spinner: boolean = false;
 
   constructor(
     private _router: Router,
     private _userService: UsersService,
-    private _fb: FormBuilder
+    private _fb: FormBuilder,
+    private _sendEmailService: SendMailService
   ) {
   }
 
@@ -54,25 +62,43 @@ export class RegisterComponent implements OnInit {
       return;
     } else {
       this.submitted = true;
-      this._userService.createUser(this.register.value).subscribe(
-        (data: ResponseObject) => {
-          Swal.fire({
-            position: 'center',
-            icon: 'success',
-            title: data.message,
-            showConfirmButton: false,
-            timer: 1500,
-          }).then((result) => {
-            if (result.dismiss == Swal.DismissReason.timer) {
-              this._router.navigate(['account/login']).then();
-            }
-          });
+      this._userService.checkData(this.register.controls['username'].value, this.register.controls['email'].value).subscribe(
+        () => {
+          this.spinner = true;
+          this._sendEmailService.sendMail(this.register.controls['email'].value, this.register.controls['fullName'].value).subscribe(
+            (result) => {
+              this.spinner = false;
+              $('#code-confirmation').modal('show');
+            }, (error) => alert(error));
         },
         (error) => {
-          alert(error.message);
+          alert(error.message)
         }
       );
     }
+  }
+
+  public confirmation() {
+    this._userService.createUserClient(this.register.value, this.code).subscribe(
+      (data: ResponseObject) => {
+        Swal.fire({
+          position: 'center',
+          icon: 'success',
+          title: data.message,
+          showConfirmButton: false,
+          timer: 1500,
+        }).then((result) => {
+          if (result.dismiss == Swal.DismissReason.timer) {
+            this.register.reset();
+            this.closeModalConfirm.nativeElement.click();
+            this._router.navigate(['account/login']).then();
+          }
+        });
+      },
+      (error) => {
+        this.messageError.nativeElement.innerText = error.message
+      }
+    );
   }
 }
 

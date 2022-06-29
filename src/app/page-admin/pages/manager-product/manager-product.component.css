@@ -125,3 +125,7 @@ tbody::-webkit-scrollbar-thumb {
   justify-content: center;
   align-items: center;
 }
+
+table#info_product tbody tr td {
+  border-bottom: 1px solid #59ab6e;
+}

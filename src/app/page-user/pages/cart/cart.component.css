@@ -190,3 +190,25 @@ tbody::-webkit-scrollbar-thumb {
 .text-error {
   color: red !important;
 }
+
+.spinner-order {
+  position: fixed;
+  right: 0;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.spinner-order .spinner-child {
+  position: absolute;
+  top: 50%;
+  left: 45%;
+}
+
+.spinner-order span {
+  margin-left: 20px;
+  position: absolute;
+  top: 55%;
+  left: 45%;
+}

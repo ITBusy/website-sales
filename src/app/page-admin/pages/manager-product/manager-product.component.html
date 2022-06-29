@@ -11,7 +11,7 @@
         <th class="text-white" style="width: 95px">Ảnh</th>
         <th class="text-white">Tên Sản Phẩm</th>
         <th class="text-white">Cpu</th>
-        <th class="text-white" colspan="2">Ổ Cứng</th>
+        <th class="text-white" style="width: 240px">Ổ Cứng</th>
         <th class="text-white">Ram</th>
         <th class="text-white">Màn Hình</th>
         <th class="text-white" colspan="2">###</th>
@@ -34,7 +34,7 @@
         <td>
           {{ item.cpu }}
         </td>
-        <td colspan="2">
+        <td style="width: 240px">
           {{ item.hardDiskDrive | cutChain}}
         </td>
         <td>
@@ -44,13 +44,15 @@
           {{ item.monitors }}
         </td>
         <td colspan="2">
-          <button (click)="findProductById(item.pid)" class="btn btn-link" data-bs-target="#update-product"
+          <button (click)="findProductById(item.pid)" *ngIf="item.active"
+                  class="btn btn-link" data-bs-target="#update-product"
                   data-bs-toggle="modal">Cập Nhật
           </button>
-          <button class="btn btn-link" data-bs-target="#user-detail"
+          <button (click)="infoProduct(item)" class="btn btn-link" data-bs-target="#info-product"
                   data-bs-toggle="modal">Chi Tiết
           </button>
-          <button class="btn btn-link" data-bs-target="#formUser" data-bs-toggle="modal">Xóa</button>
+          <button (click)="updateActiveProduct(item)"
+                  class="btn btn-link">{{item.active ? "Xoá" : "Khôi Phục"}}</button>
         </td>
       </tr>
       </tbody>
@@ -642,4 +644,182 @@
   </div>
 </div>
 
+<!-- Modal Info-->
+<div aria-hidden="true" aria-labelledby="staticBackdropLabel" class="modal fade" data-bs-backdrop="static"
+     data-bs-keyboard="false"
+     id="info-product" tabindex="-1">
+  <div class="modal-dialog modal-lg" id="info-cart-xxl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Chi Tiết Sản Phẩm</h5>
+        <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+      </div>
+      <div class="modal-body">
+        <div class="card" style="background-color:#56ab6e; border-color:darkblue;">
+          <div class="card-body">
+            <table border="1" cellspacing="0" class="mce-item-table table table-bordered" id="info_product"
+                   style="background-color:#ffffff; border-collapse:collapse; border-spacing:0;
+                    border:1px solid #eeeeee; box-sizing:border-box; color:#333333;
+                     font-family:Roboto,sans-serif; font-size:13px; line-height:20px; margin-left:auto;
+                      margin-right:auto; max-width:100%; min-width:500px; width:100%; margin-bottom: 0">
+              <tbody style="box-sizing: border-box;">
+              <tr class="row-info" style="box-sizing:border-box">
+                <td
+                  style="background-color:#f7f7f7 !important;  box-sizing:border-box; padding:8px; vertical-align:top; width:22.1614%">
+                  <span style="font-size:16px"><strong>Mã Sản Phẩm</strong></span></td>
+                <td
+                  style=" box-sizing:border-box; padding:8px; vertical-align:top; width:529px">
+                  <span style="font-size:16px"><strong>{{productInfo?.pid}}</strong></span>
+                </td>
+              </tr>
+              <tr class="row-info" style="box-sizing:border-box">
+                <td
+                  style="background-color:#f7f7f7 !important;  box-sizing:border-box; padding:8px; vertical-align:top; width:22.1614%">
+                  <strong><span style="font-size:16px">Tên Sản Phẩm</span></strong></td>
+                <td
+                  style=" box-sizing:border-box; padding:8px; vertical-align:top; width:529px">
+                  <span style="font-size:16px"><strong>{{productInfo?.name}}</strong></span>
+                </td>
+              </tr>
+              <tr class="row-info" style="box-sizing:border-box">
+                <td
+                  style="background-color:#f7f7f7 !important;  box-sizing:border-box; padding:8px; vertical-align:top; width:22.1614%">
+                  <span style="font-size:16px"><strong>CPU</strong></span></td>
+                <td
+                  style=" box-sizing:border-box; padding:8px; vertical-align:top; width:529px">
+                  <span style="font-size:16px"><strong>{{productInfo?.cpu}}</strong></span>
+                </td>
+              </tr>
+              <tr class="row-info" style="box-sizing:border-box">
+                <td
+                  style="background-color:#f7f7f7 !important;  box-sizing:border-box; padding:8px; vertical-align:top; width:22.1614%">
+                  <span style="font-size:16px"><strong>GPU</strong></span></td>
+                <td
+                  style=" box-sizing:border-box; padding:8px; vertical-align:top; width:529px">
+                  <strong><span style="font-size:16px">{{productInfo?.gpu}}</span></strong>
+                </td>
+              </tr>
+              <tr class="row-info" style="box-sizing:border-box">
+                <td
+                  style="background-color:#f7f7f7 !important;  box-sizing:border-box; padding:8px; vertical-align:top; width:22.1614%">
+                  <span style="font-size:16px"><strong>Ổ Cứng</strong></span></td>
+                <td
+                  style="box-sizing:border-box; padding:8px; vertical-align:top; width:529px">
+                  <strong><span
+                    style="font-size:16px">{{productInfo?.hardDiskDrive}}</span></strong></td>
+              </tr>
+              <tr class="row-info" style="box-sizing:border-box">
+                <td
+                  style="background-color:#f7f7f7 !important;  box-sizing:border-box; padding:8px; vertical-align:top; width:22.1614%">
+                  <span style="font-size:16px"><strong>Ram</strong></span></td>
+                <td
+                  style=" box-sizing:border-box; padding:8px; vertical-align:top; width:529px">
+                  <strong><span
+                    style="font-size:16px">{{productInfo?.ramdisk}}</span></strong>
+                </td>
+              </tr>
+              <tr class="row-info" style="box-sizing:border-box">
+                <td
+                  style="background-color:#f7f7f7 !important; box-sizing:border-box; padding:8px; vertical-align:top; width:22.1614%">
+                  <span style="font-size:16px"><strong>Màn Hình</strong></span></td>
+                <td
+                  style=" box-sizing:border-box; padding:8px; vertical-align:top; width:529px">
+                  <strong><span style="font-size:16px">{{productInfo?.monitors}}</span></strong>
+                </td>
+              </tr>
+              <tr class="row-info" style="box-sizing:border-box">
+                <td
+                  style="background-color:#f7f7f7 !important; box-sizing:border-box; padding:8px; vertical-align:top; width:22.1614%">
+                  <span style="font-size:16px"><strong>Thông Tin Pin</strong></span></td>
+                <td
+                  style=" box-sizing:border-box; padding:8px; vertical-align:top; width:529px; font-size:16px">
+                  <strong>{{productInfo?.batteryCapacity}}</strong>
+                </td>
+              </tr>
+              <tr class="row-info" style="box-sizing:border-box">
+                <td
+                  style="background-color:#f7f7f7 !important; box-sizing:border-box; padding:8px; vertical-align:top; width:22.1614%">
+                  <span style="font-size:16px"><strong>Đèn Bàn Phím</strong></span></td>
+                <td
+                  style=" box-sizing:border-box;font-size:16px; padding:8px; vertical-align:top; width:529px">
+                  <strong>{{productInfo?.keyboardLights}}</strong>
+                </td>
+              </tr>
+              <tr class="row-info" style="box-sizing:border-box">
+                <td
+                  style="background-color:#f7f7f7 !important; box-sizing:border-box; padding:8px; vertical-align:top; width:22.1614%">
+                  <span style="font-size:16px"><strong>Thiết Kế</strong></span></td>
+                <td
+                  style=" box-sizing:border-box;font-size:16px; padding:8px; vertical-align:top; width:529px">
+                  <strong>{{productInfo?.design}}</strong>
+                </td>
+              </tr>
+              <tr class="row-info" style="box-sizing:border-box">
+                <td
+                  style="background-color:#f7f7f7 !important; box-sizing:border-box; padding:8px; vertical-align:top; width:22.1614%">
+                  <span style="font-size:16px"><strong>Cổng Kết Nối</strong></span></td>
+                <td
+                  style=" box-sizing:border-box;font-size:16px; padding:8px; vertical-align:top; width:529px">
+                  <strong>
+                    <ul>
+                      <li *ngFor="let item of gateway" style="padding-bottom: 10px">{{item}}</li>
+                    </ul>
+                  </strong>
+                </td>
+              </tr>
+              <tr class="row-info" style="box-sizing:border-box">
+                <td
+                  style="background-color:#f7f7f7 !important; box-sizing:border-box; padding:8px; vertical-align:top; width:22.1614%">
+                  <span style="font-size:16px"><strong>Hệ Điều Hành</strong></span></td>
+                <td
+                  style=" box-sizing:border-box;font-size:16px; padding:8px; vertical-align:top; width:529px">
+                  <strong>{{productInfo?.operatingSystem}}</strong>
+                </td>
+              </tr>
+              <tr class="row-info" style="box-sizing:border-box">
+                <td
+                  style="background-color:#f7f7f7 !important; box-sizing:border-box; padding:8px; vertical-align:top; width:22.1614%">
+                  <span style="font-size:16px"><strong>Bảo Hành</strong></span></td>
+                <td
+                  style=" box-sizing:border-box;font-size:16px; padding:8px; vertical-align:top; width:529px">
+                  <strong>{{productInfo?.warranty}}</strong>
+                </td>
+              </tr>
+              <tr class="row-info" style="box-sizing:border-box">
+                <td
+                  style="background-color:#f7f7f7 !important; box-sizing:border-box; padding:8px; vertical-align:top; width:22.1614%">
+                  <span style="font-size:16px"><strong>Ảnh Sản Phẩm</strong></span></td>
+                <td
+                  style=" box-sizing:border-box;font-size:16px; padding:8px; vertical-align:top; width:529px">
+                  <strong>
+                    <img [src]="productInfo?.imageMain" alt=""
+                         style="border: 1px solid #ccc; width: 80px; height: 80px; margin: 5px; border-radius: 4px">
+                    <img *ngFor="let item of productInfo?.imageUrl" [src]="item?.imageUrl" alt=""
+                         style="border: 1px solid #ccc; width: 80px; height: 80px; margin: 5px; border-radius: 4px">
 
+                  </strong>
+                </td>
+              </tr>
+              <tr class="row-info" style="box-sizing:border-box">
+                <td
+                  style="background-color:#f7f7f7 !important;  box-sizing:border-box; padding:8px; vertical-align:middle; width:22.1614%">
+                  <span style="font-size:16px"><strong>Giá Sản Phẩm</strong></span></td>
+                <td
+                  style=" box-sizing:border-box; padding:8px; vertical-align:top; width:529px">
+                  <strong><span style="font-size:16px">
+                  {{productInfo?.price?.toLocaleString('vn', {style: undefined, currency: 'VND'})}}
+                  </span></strong>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <!--      <div class="modal-footer">-->
+      <!--        <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Close</button>-->
+      <!--        <button class="btn btn-primary" type="button">Understood</button>-->
+      <!--      </div>-->
+    </div>
+  </div>
+</div>

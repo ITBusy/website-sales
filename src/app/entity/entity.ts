@@ -143,3 +143,12 @@ export interface CommentDtoInterface {
   product: ProductDtoInterface
   commentDetailsList: CommentDetailsInterface[],
 }
+
+export interface turnoverInterface {
+  name: string,
+  price: number,
+  quantity: number,
+  month: number,
+  year: number,
+  total: number
+}

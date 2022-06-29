@@ -60,4 +60,11 @@ export class ProductService {
       catchError(err => throwError(err.error))
     );
   }
+
+  public updateActiveProduct(productDto: ProductDtoInterface): Observable<any> {
+    return this._http.put<any>(`${baseUrl}/product/active`, productDto).pipe(
+      map(res => res),
+      catchError(err => throwError(err.data))
+    );
+  }
 }

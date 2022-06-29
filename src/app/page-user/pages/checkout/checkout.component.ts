@@ -13,6 +13,7 @@ export class CheckoutComponent implements OnInit {
   public orderCompletedList: OrderDtoInterface[] = [];
   public orderCancelledList: OrderDtoInterface[] = [];
 
+
   constructor(private _cartService: CartService,
               private _loginService: LoginService) {
   }

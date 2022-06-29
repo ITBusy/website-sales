@@ -96,12 +96,12 @@ export class CommentComponent implements OnInit {
         if (days > lastDaysMonth) {
           let daysOfYear = ((now.getFullYear() % 4 === 0 && now.getFullYear() % 100 > 0) || now.getFullYear() % 400 == 0) ? 366 : 365;
           if (days > daysOfYear) {
-            time_comment = Math.floor((days / daysOfYear)) + " ago"
+            time_comment = Math.floor((days / daysOfYear)) + "  ago"
           } else {
-            time_comment = Math.floor((days / lastDaysMonth)) + " ago"
+            time_comment = Math.floor((days / lastDaysMonth)) + " months ago"
           }
         } else {
-          time_comment = days + " ago"
+          time_comment = days + " days ago"
         }
       } else {
         time_comment = hour + "h ago";

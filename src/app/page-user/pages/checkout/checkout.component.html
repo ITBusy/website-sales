@@ -50,7 +50,7 @@
                     </tr>
                     </thead>
                     <tbody class="table-body">
-                    <ng-container *ngFor="let order of orderList">
+                    <ng-container *ngFor="let order of orderList; let i = index">
                       <tr>
                         <td class="border-0 align-middle p-2 px-3" colspan="1">#SO-{{order?.oid}}</td>
                         <td class="border-0 align-middle">
@@ -69,9 +69,11 @@
                             Hủy Đơn
                           </button>
                           <div class="accordion-item" style="height: 40px">
-                            <h2 class="accordion-header" id="flush-headingThree12">
-                              <button aria-controls="flush-collapseThree1" aria-expanded="false"
-                                      class="accordion-button collapsed" data-bs-target="#flush-collapseThree1"
+                            <h2 [id]="'flush-headingThree'+i" class="accordion-header">
+                              <button [attr.aria-controls]="'flush-collapseThree'+i"
+                                      [attr.data-bs-target]="'#flush-collapseThree'+i"
+                                      aria-expanded="false"
+                                      class="accordion-button collapsed"
                                       data-bs-toggle="collapse" style="height: 40px" type="button">
                                 Chi Tiết
                               </button>
@@ -82,9 +84,9 @@
                       <!--Start flush-collapseThree -->
                       <tr>
                         <td colspan="5">
-                          <div aria-labelledby="flush-headingThree" class="accordion-collapse collapse"
-                               data-bs-parent="#accordionFlushExample1"
-                               id="flush-collapseThree1">
+                          <div [attr.aria-labelledby]="'flush-headingThree'+i" [id]="'flush-collapseThree'+i"
+                               class="accordion-collapse collapse"
+                               data-bs-parent="#accordionFlushExample1">
                             <div class="accordion-body">
                               <table class="table table-striped table-inverse table-responsive" id="table-detail1">
                                 <thead class="thead-inverse">
@@ -156,7 +158,7 @@
                     </tr>
                     </thead>
                     <tbody class="table-body">
-                    <ng-container *ngFor="let item of orderCompletedList">
+                    <ng-container *ngFor="let item of orderCompletedList; let i = index">
                       <tr>
                         <td class="border-0 align-middle p-2 px-3" colspan="1">#SO-{{item?.oid}}</td>
                         <td class="border-0 align-middle">
@@ -170,9 +172,10 @@
                         <td class="border-0 align-middle"
                             style="text-align: center; display: flex;justify-content: space-between">
                           <div class="accordion-item" style="height: 40px">
-                            <h2 class="accordion-header" id="flush-headingThree">
-                              <button aria-controls="flush-collapseThree" aria-expanded="false"
-                                      class="accordion-button collapsed" data-bs-target="#flush-collapseThree"
+                            <h2 [id]="'flush-headingThree'+i" class="accordion-header">
+                              <button [attr.aria-controls]="'flush-collapseThree'+i" [attr.data-bs-target]="'#flush-collapseThree'+i"
+                                      aria-expanded="false"
+                                      class="accordion-button collapsed"
                                       data-bs-toggle="collapse" style="height: 40px" type="button">
                                 Chi Tiết
                               </button>
@@ -183,9 +186,9 @@
                       <!--Start flush-collapseThree -->
                       <tr>
                         <td colspan="5">
-                          <div aria-labelledby="flush-headingThree" class="accordion-collapse collapse"
-                               data-bs-parent="#accordionFlushExample"
-                               id="flush-collapseThree">
+                          <div [attr.aria-labelledby]="'flush-headingThree'+i" [id]="'flush-collapseThree'+i"
+                               class="accordion-collapse collapse"
+                               data-bs-parent="#accordionFlushExample">
                             <div class="accordion-body">
                               <table class="table table-striped table-inverse table-responsive table-detail">
                                 <thead class="thead-inverse">
