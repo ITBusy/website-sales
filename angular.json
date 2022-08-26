@@ -67,6 +67,10 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "app:build",
+            "ssl": false
+          },
           "configurations": {
             "production": {
               "browserTarget": "asm_frontend:build:production"
@@ -103,5 +107,8 @@
       }
     }
   },
-  "defaultProject": "asm_frontend"
+  "defaultProject": "asm_frontend",
+  "cli": {
+    "analytics": "c9cea461-365b-43fe-8e17-1822585ecde6"
+  }
 }

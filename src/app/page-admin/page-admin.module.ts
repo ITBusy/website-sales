@@ -50,14 +50,13 @@ export function createTranslateLoader(http: HttpClient) {
     AngularFireModule.initializeApp(environment.firebaseConfig),
     FormsModule,
     ReactiveFormsModule,
-    TranslateModule.forRoot(
+    TranslateModule.forChild(
       {
         loader: {
           provide: TranslateLoader,
-          useFactory: (createTranslateLoader),
+          useFactory: createTranslateLoader,
           deps: [HttpClient]
         },
-        defaultLanguage: 'vi'
       }
     )
   ],

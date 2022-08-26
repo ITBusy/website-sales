@@ -1,11 +1,11 @@
 {
   "admin_user": {
     "btn_add": "Thêm Tài Khoản",
-    "table": "Hình Ảnh",
-    "table1": "Tên Tài Khoản",
-    "table2": "Họ và Tên",
-    "table3": "Email",
-    "table4": "Vai Trò"
+    "avatar": "Hình Ảnh",
+    "name_account": "Tên Tài Khoản",
+    "full_name": "Họ và Tên",
+    "email": "Email",
+    "role": "Vai Trò"
   },
   "header": {
     "welcome": "Xin Chào"

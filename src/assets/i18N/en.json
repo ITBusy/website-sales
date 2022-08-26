@@ -1,11 +1,11 @@
 {
   "admin_user": {
     "btn_add": "Add User",
-    "table": "Avatar",
-    "table1": "Name Account",
-    "table2": "Full Name",
-    "table3": "Email",
-    "table4": "Role"
+    "avatar": "Avatar",
+    "name_account": "Name Account",
+    "full_name": "Full Name",
+    "email": "Email",
+    "role": "Role"
   },
   "header": {
     "welcome": "Hi"

@@ -5,8 +5,8 @@
       <div class="w-100 d-flex justify-content-end">
         <div *ngIf="_login.isLoggedIn()" class="d-flex justify-content-between align-items-center"
              style="width: 22%; margin-right: 25px;">
-                    <span style="font-size: 0.9rem !important; font-weight: bold;">Xin Chào
-                        <span style="margin-left: 5px; color: #59ab6e">{{user.fullName | lowercase}}</span>
+                    <span style="font-size: 0.9rem !important; font-weight: bold;">{{'header.welcome' | translate}}
+                      <span style="margin-left: 5px; color: #59ab6e">{{user.fullName | lowercase}}</span>
                     </span>
           <span (click)="logout()" class="logout" style="font-size: 0.9rem !important;">
                         <i class="fas fa-sign-out-alt" style="margin-right: 5px;"></i>
@@ -16,12 +16,11 @@
             <!--            <label for="languages">Ngôn Ngữ</label>-->
             <select (change)="languages($event.target)" class="form-control" id="languages" name="languages" style="
                   font-size: 0.8rem !important;background: none;border: none; color: white; font-weight: bold; outline: none">
-              <option [selected]="lang=='en'" style="color: black; font-weight: bold; font-size:0.8rem !important"
-                      value="en">Tiếng Anh
+              <option [selected]="lang == 'vi'" style="color: black; font-weight: bold; font-size:0.8rem !important"
+                      value="vi">Tiếng Việt
               </option>
-              <option [selected]="lang=='vi'" style="color: black; font-weight: bold; font-size:0.8rem !important"
-                      value="vi">Tiếng
-                Việt
+              <option [selected]="lang == 'en'" style="color: black; font-weight: bold; font-size:0.8rem !important"
+                      value="en">Tiếng Anh
               </option>
             </select>
           </div>

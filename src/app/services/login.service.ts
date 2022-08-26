@@ -72,6 +72,13 @@ export class LoginService {
     return this.getUser().authority;
   }
 
+  public async checkExists(id: number): Promise<boolean | undefined> {
+    return await this._http.post<boolean>(`${baseUrl}/exists`, id).pipe(
+      map((res) => res),
+      catchError((err) => throwError(err))
+    ).toPromise();
+  }
+
   private setWithExpiry(key: string, value: any, day: number) {
     const now = new Date();
     const item = {

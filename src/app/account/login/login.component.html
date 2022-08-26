@@ -1,49 +1,51 @@
 <div class="col-md-6 offset-md-3">
-    <form class="form-login" [formGroup]="loginForm" (ngSubmit)="onLogin()">
+  <form (ngSubmit)="onLogin()" [formGroup]="loginForm" class="form-login">
 
-        <app-sign-with></app-sign-with>
+    <app-sign-with></app-sign-with>
 
-        <!-- Email input -->
-        <div class="input-group mb-3">
+    <!-- Email input -->
+    <div class="input-group mb-3">
             <span class="input-group-text" id="basic-addon1" style="color: #fff; background-color: #59ab6e;">
                 <i class="fas fa-user"></i>
             </span>
-            <input type="text" class="form-control" formControlName="username" placeholder="Username" aria-label="Username"
-                aria-describedby="basic-addon1">
-        </div>
+      <input aria-describedby="basic-addon1" aria-label="Username" class="form-control" formControlName="username"
+             placeholder="Username"
+             type="text">
+    </div>
 
-        <!-- Password input -->
-        <div class="input-group mb-3">
+    <!-- Password input -->
+    <div class="input-group mb-3">
             <span class="input-group-text" id="basic-addon1" style="color: #fff; background-color: #59ab6e;">
                 <i class="fas fa-key"></i>
             </span>
-            <input type="password" class="form-control" formControlName="password" placeholder="Username" aria-label="Username"
-                aria-describedby="basic-addon1">
+      <input aria-describedby="basic-addon1" aria-label="Username" class="form-control" formControlName="password"
+             placeholder="Username"
+             type="password">
+    </div>
+
+    <!-- 2 column grid layout -->
+    <div class="row mb-4">
+      <div class="col-md-6">
+        <!-- Checkbox -->
+        <div class="form-check mb-3 mb-md-0">
+          <input checked class="form-check-input" formControlName="remenber" id="loginCheck" type="checkbox" value=""/>
+          <label class="form-check-label" for="loginCheck" style="color: #fff"> Nhớ Tài Khoản </label>
         </div>
+      </div>
 
-        <!-- 2 column grid layout -->
-        <div class="row mb-4">
-            <div class="col-md-6">
-                <!-- Checkbox -->
-                <div class="form-check mb-3 mb-md-0">
-                    <input class="form-check-input" type="checkbox" value="" formControlName="remenber" id="loginCheck" checked />
-                    <label style="color: #fff" class="form-check-label" for="loginCheck"> Nhớ Tài Khoản </label>
-                </div>
-            </div>
+      <div class="col-md-6 d-flex justify-content-end">
+        <!-- Simple link -->
+        <a href="#!">Quên Mật Khẩu?</a>
+      </div>
+    </div>
 
-            <div class="col-md-6 d-flex justify-content-end">
-                <!-- Simple link -->
-                <a href="#!">Quên Mật Khẩu?</a>
-            </div>
-        </div>
+    <!-- Submit button -->
+    <button class="btn btn-primary btn-block mb-4" type="submit">Đăng Nhập</button>
 
-        <!-- Submit button -->
-        <button type="submit" class="btn btn-primary btn-block mb-4">Đăng Nhập</button>
-
-        <!-- Register buttons -->
-        <div class="text-center">
-            <p style="color: #fff">Bạn Chưa Có Tài Khoản <a [routerLink]="['/account/register']">Đăng Ký</a></p>
-        </div>
-    </form>
+    <!-- Register buttons -->
+    <div class="text-center">
+      <p style="color: #fff">Bạn Chưa Có Tài Khoản <a [routerLink]="['/account/register']">Đăng Ký</a></p>
+    </div>
+  </form>
 </div>
 <!-- Pills content -->

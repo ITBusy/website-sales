@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {LoginService} from '../services/login.service';
 import {CartService} from "../services/cart.service";
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-page-user',
@@ -11,7 +12,8 @@ export class PageUserComponent implements OnInit {
   public count_cart: number;
 
   constructor(private _loginService: LoginService,
-              private _cartService: CartService) {
+              private _cartService: CartService,
+              private _router: Router) {
   }
 
 
