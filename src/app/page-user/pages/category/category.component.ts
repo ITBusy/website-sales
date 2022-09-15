@@ -112,4 +112,9 @@ export class CategoryComponent implements OnInit {
     );
 
   }
+
+  onPage($event: number) {
+    this.page = $event;
+    window.scrollTo(0, 0);
+  }
 }

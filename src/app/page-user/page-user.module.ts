@@ -19,6 +19,7 @@ import {CommentComponent} from './component/comment/comment.component';
 import {CutChainPipe} from './pipe/cut-chain.pipe';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { SortPipe } from './pipe/sort.pipe';
+import { ScrollTopComponent } from './component/scroll-top/scroll-top.component';
 
 
 @NgModule({
@@ -37,7 +38,8 @@ import { SortPipe } from './pipe/sort.pipe';
     AbountComponent,
     CommentComponent,
     CutChainPipe,
-    SortPipe
+    SortPipe,
+    ScrollTopComponent
   ],
   imports: [
     CommonModule,

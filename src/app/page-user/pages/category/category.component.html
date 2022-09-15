@@ -120,7 +120,7 @@
       <!--        </ul>-->
       <!--      </div>-->
       <ng-container *ngIf="products.length > 6">
-        <pagination-controls (pageChange)="page = $event"></pagination-controls>
+        <pagination-controls (pageChange)="onPage($event)"></pagination-controls>
       </ng-container>
     </div>
 
